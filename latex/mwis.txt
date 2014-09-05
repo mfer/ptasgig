@@ -1,0 +1,5 @@
+The goal of the maximum weight independent set problem (MWIS) is to compute, for a given set of geometric objects with certain weights, a subset of disjoint (non-overlapping) objects with maximum total weight.
+
+There is a PTAS (polynomial-time algorihtm scheme) for MWIS in disk graphs, provided that a disk representation of the graph is given. 
+The running-time for achieving approximation ratio $1+\epsilon$ 
+is $n^{O(1/\epsilon^{2})}$ for a disk graph with n disks.

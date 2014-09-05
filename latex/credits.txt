@@ -1,0 +1,2 @@
+mwis.txt:
+    Thomas Erlebach, Klaus Jansen, and Eike Seidel. 2005. Polynomial-Time Approximation Schemes for Geometric Intersection Graphs. <em>SIAM J. Comput.</em> 34, 6 (June 2005), 1302-1323. DOI=10.1137/S0097539702402676 http://dx.doi.org/10.1137/S0097539702402676
