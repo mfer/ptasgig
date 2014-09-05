@@ -21,7 +21,7 @@
 
 int main(int argc, char **argv)
 {
-    printf("Testing Floyd algorithm...\n\n");
+    printf("Testing MWIS algorithm...\n\n");
 
     /* Create context */
     mwis_context* c = mwis_context_new(6);
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     /* Run algorithm */
     bool success = mwis(c);
     if(!success) {
-        printf("ERROR: Floyd algorithm was unable to complete... exiting.\n");
+        printf("ERROR: MWIS algorithm was unable to complete... exiting.\n");
         return(-2);
     }
 

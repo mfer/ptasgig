@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef H_FLOYD_REPORT
-#define H_FLOYD_REPORT
+#ifndef H_MWIS_REPORT
+#define H_MWIS_REPORT
 
 #include "mwis.h"
 #include "graphviz.h"

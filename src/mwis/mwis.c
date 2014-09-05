@@ -96,10 +96,20 @@ bool mwis(mwis_context *c)
     /* Start counting time */
     GTimer* timer = g_timer_new();
 
-    /* Run the Floyd Warshall algorithm */
+    /* Run the MWIS PTAS */
     matrix* d = c->table_d;
     matrix* p = c->table_p;
     int nodes = d->rows;
+
+    /* First we need to do the
+      FIG 2.4 Computing the auxiliary table AT_S,I (S_g,h, ∗). 
+      http://goo.gl/XvNkg4
+    */
+
+    /* And then, we do
+      FIG 2.7 Computing the auxiliary table AT_S,I (S_g1··g3,h1··h2, ∗).
+      http://goo.gl/hmi9tI
+    */
 
     for(int k = 0; k < nodes; k++) {
         for(int i = 0; i < nodes; i++) {

@@ -69,7 +69,7 @@ bool mwis_report(mwis_context* c)
         fprintf(report, "\\noindent\\includegraphics[height=210px]"
                         "{reports/graph.pdf}\n");
         fprintf(report, "\\caption{%s.}\n\\end{figure}\n",
-                        "Floyd's input directed graph system");
+                        "MWIS's input directed graph system");
     } else {
         fprintf(report, "ERROR: Graph image could not be generated.\n");
     }

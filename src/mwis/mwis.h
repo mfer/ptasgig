@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef H_FLOYD
-#define H_FLOYD
+#ifndef H_MWIS
+#define H_MWIS
 
 #include "utils.h"
 #include "matrix.h"
 
 /**
- * Floyd's algorithm context data structure.
+ * MWIS's algorithm context data structure.
  */
 typedef struct {
 
@@ -46,7 +46,7 @@ mwis_context* mwis_context_new(int nodes);
 void mwis_context_free(mwis_context* c);
 
 /**
- * Perform Floyd algorithm with given context.
+ * Perform MWIS algorithm with given context.
  *
  * @param mwis_context, the mwis's context data structure.
  * @return TRUE if execution was successful or FALSE if and error ocurred. Check
