@@ -101,10 +101,18 @@ bool mwis(mwis_context *c)
     matrix* p = c->table_p;
     int nodes = d->rows;
 
+
     /* First we need to do the
       FIG 2.4 Computing the auxiliary table AT_S,I (S_g,h, ∗). 
       http://goo.gl/XvNkg4
     */
+
+    int k = 5;
+    double d_min = 0.001; 
+    int l = (int)(log(1/d_min)/log(k+1));
+    printf("%d\n",l);
+
+
 
     /* And then, we do
       FIG 2.7 Computing the auxiliary table AT_S,I (S_g1··g3,h1··h2, ∗).
