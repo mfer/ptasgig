@@ -1,8 +1,10 @@
 \documentclass{beamer}
-\usetheme{Darmstadt}
+\usetheme{Montpellier}
 \usefonttheme[onlylarge]{structurebold}
 \setbeamerfont*{frametitle}{size=\normalsize,series=\bfseries}
 \setbeamertemplate{navigation symbols}{}
+
+\useoutertheme{infolines}
 
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
@@ -13,9 +15,9 @@
 
 \long\def\/*#1*/{}
 
-\title[POLYNOMIAL-TIME APPROXIMATION SCHEMES FOR GEOMETRIC INTERSECTION GRAPHS]
+\title[Unfolding MWIS on PTASGIG]
 {
-  Unfolding PTASGIG
+  Unfolding MWIS on PTASGIG
 }
 \author[Manassés]
 {
@@ -226,7 +228,7 @@ Belo Horizonte, Brazil
       \end{frame}
 
     \subsection{Pseudo-Code}
-      \begin{frame}{Dividing in Squares}
+      \begin{frame}{Dividing into Squares}
         \begin{figure}[h!]
           \centering
             \includegraphics[width=0.75\textwidth]{img/2-4-fig.png}
@@ -342,7 +344,7 @@ Belo Horizonte, Brazil
 
 
   \section{Approximation proof for the algorithm}
-    \subsection{Upper Bound}
+    \subsection{Lower Bound}
       \begin{frame}{Existence and Bound}
         \begin{block}{Theorem 2.10}
           There is a PTAS for MWIS in disk graphs,
@@ -437,6 +439,15 @@ Belo Horizonte, Brazil
           The running-time for achieving approximation
           ratio $1 + \epsilon$ is $$n^{O\left(\frac{1}{\epsilon^{2(d-1)}}\right)}$$ for a disk-like graph with $n$ disk-like objects and any constant $d$.
         \end{block}
+      \end{frame}    
+
+  \section{}
+    \subsection{}  
+      \begin{frame}{Questions}
+        \begin{figure}[h!]
+          \centering
+            \includegraphics[width=0.5\textwidth]{img/mwis.png}
+        \end{figure}   
       \end{frame}    
 
 \end{document}

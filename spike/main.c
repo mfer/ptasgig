@@ -34,8 +34,8 @@ main() {
   k = 0;
   l_max = 0;
 
-  while (true) {
-    // very interesting form to generate all subsets
+  while (true) 
+{    // very interesting form to generate all subsets
     if (S[k] < (N-1)) {
       S[k+1] = S[k] + 1;
       k += 1;

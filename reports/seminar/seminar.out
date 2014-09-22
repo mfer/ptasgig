@@ -1,0 +1,14 @@
+\BOOKMARK [2][]{Outline0.1}{Preliminaries}{}% 1
+\BOOKMARK [3][]{Outline0.1.1.3}{PTASGIG}{Outline0.1}% 2
+\BOOKMARK [2][]{Outline0.2}{Model}{}% 3
+\BOOKMARK [3][]{Outline0.2.1.10}{Intersection graphs of disk-like objects }{Outline0.2}% 4
+\BOOKMARK [2][]{Outline0.3}{Problem Definition}{}% 5
+\BOOKMARK [3][]{Outline0.3.1.13}{MWIS}{Outline0.3}% 6
+\BOOKMARK [2][]{Outline0.4}{Algorithm}{}% 7
+\BOOKMARK [3][]{Outline0.4.1.14}{Overview}{Outline0.4}% 8
+\BOOKMARK [3][]{Outline0.4.2.16}{Pseudo-Code}{Outline0.4}% 9
+\BOOKMARK [3][]{Outline0.4.3.20}{Complexity}{Outline0.4}% 10
+\BOOKMARK [2][]{Outline0.5}{Approximation proof for the algorithm}{}% 11
+\BOOKMARK [3][]{Outline0.5.1.21}{Lower Bound}{Outline0.5}% 12
+\BOOKMARK [2][]{Outline0.6}{Conclusion}{}% 13
+\BOOKMARK [3][]{Outline0.6.1.25}{Extension to d dimensions}{Outline0.6}% 14
