@@ -14,3 +14,5 @@
 \beamer@subsectionintoc {5}{1}{Lower Bound}{22}{0}{5}
 \beamer@sectionintoc {6}{Conclusion}{26}{0}{6}
 \beamer@subsectionintoc {6}{1}{Extension to $d$ dimensions}{26}{0}{6}
+\beamer@sectionintoc {7}{Practical project}{27}{0}{7}
+\beamer@subsectionintoc {7}{1}{Possible approaches}{27}{0}{7}

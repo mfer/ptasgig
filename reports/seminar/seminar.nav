@@ -77,11 +77,17 @@
 \headcommand {\beamer@subsectionentry {0}{6}{1}{26}{Extension to $d$ dimensions}}\headcommand {\beamer@subsectionpages {26}{25}}
 \headcommand {\slideentry {6}{1}{1}{26/26}{Extension to $d$ dimensions}{0}}
 \headcommand {\beamer@framepages {26}{26}}
-\headcommand {\beamer@subsectionentry {0}{7}{1}{27}{}}\headcommand {\beamer@subsectionpages {27}{26}}
-\headcommand {\slideentry {7}{1}{1}{27/27}{}{0}}
+\headcommand {\sectionentry {7}{Practical project}{27}{Practical project}{0}}
+\headcommand {\beamer@sectionpages {26}{26}}
+\headcommand {\beamer@subsectionpages {26}{26}}
+\headcommand {\beamer@subsectionentry {0}{7}{1}{27}{Possible approaches}}\headcommand {\beamer@subsectionpages {27}{26}}
+\headcommand {\slideentry {7}{1}{1}{27/27}{Possible approaches}{0}}
 \headcommand {\beamer@framepages {27}{27}}
-\headcommand {\beamer@partpages {1}{27}}
-\headcommand {\beamer@subsectionpages {27}{27}}
-\headcommand {\beamer@sectionpages {27}{27}}
-\headcommand {\beamer@documentpages {27}}
-\headcommand {\def \inserttotalframenumber {27}}
+\headcommand {\beamer@subsectionentry {0}{8}{1}{28}{}}\headcommand {\beamer@subsectionpages {28}{27}}
+\headcommand {\slideentry {8}{1}{1}{28/28}{}{0}}
+\headcommand {\beamer@framepages {28}{28}}
+\headcommand {\beamer@partpages {1}{28}}
+\headcommand {\beamer@subsectionpages {28}{28}}
+\headcommand {\beamer@sectionpages {28}{28}}
+\headcommand {\beamer@documentpages {28}}
+\headcommand {\def \inserttotalframenumber {28}}
