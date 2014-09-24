@@ -68,7 +68,7 @@ Belo Horizonte, Brazil
       \begin{frame}{Choosen Paper Cover}
         \begin{figure}[h!]
           \centering
-            \includegraphics[width=1.0\textwidth]{img/cover.png}
+            \includegraphics[width=0.9\textwidth]{img/cover.png}
         \end{figure}    
       \end{frame}
 
@@ -111,15 +111,34 @@ Belo Horizonte, Brazil
       \begin{frame}{Problems and Results}
         \small PTAS for MWIS and MWVC in the intersection graphs of disks, squares and other {\it disk-like} objects, also in higher dimensions.
         \begin{block}{\small Maximum Weight Independet Set}      
-          Compute, for a given set of geometric objects with certain weights, 
-          a subset of disjoint ({\bf non-overlapping}) objects with maximum total weight.
+          {\it \tiny The Chosen Problem for this Seminar. Wait for the next slide.} {\color{red}{\Large;}$\land)$}
         \end{block}
         \begin{block}{\small Minimum Weight Vertex Cover}
-          Compute asubset of the given objects with minimum total weight such that, 
+          Compute a subset of the given objects with minimum total weight such that, 
           for any two intersecting objects, at least one of the objects is contained in the subset.
         \end{block}
       \end{frame}
 
+   \section{Problem Definition}
+    \subsection{MWIS}  
+      \begin{frame}{Maximum Weight Independet Set}
+        \begin{block}{Goal}
+          Compute, for a given set of geometric objects with certain weights, 
+          a subset of disjoint ({\bf non-overlapping}) objects with maximum total weight.
+        \end{block}
+        \begin{figure}[h!]
+          \centering
+          \includegraphics[width=0.4\textwidth]{img/is.png}
+          {\tiny Generalized Petersen graph GP(12,4)}
+        \end{figure}
+      \end{frame}
+      \begin{frame}{NP-Completeness}
+        \begin{figure}[h!]
+          \centering
+            \includegraphics[width=0.8\textwidth]{img/np-hardness-story.png}
+        \end{figure}   
+      \end{frame}
+      
   \section{Model}
     \subsection{Intersection graphs of {\it disk-like objects} }
     \begin{frame}{}
@@ -133,7 +152,7 @@ Belo Horizonte, Brazil
     \begin{frame}{}
       \begin{figure}[h!]
         \centering
-          \includegraphics[width=0.26\textwidth]{img/disklike.png}
+          \includegraphics[width=0.255\textwidth]{img/disklike.png}
       \end{figure}    
       \begin{figure}[h!]
         \centering
@@ -182,20 +201,6 @@ Belo Horizonte, Brazil
     \end{frame}
 */
 
-  \section{Problem Definition}
-    \subsection{MWIS}  
-      \begin{frame}{Maximum Weight Independet Set}
-        \begin{block}{Goal}
-          Compute, for a given set of geometric objects with certain weights, 
-          a subset of disjoint ({\bf non-overlapping}) objects with maximum total weight.
-        \end{block}
-        \begin{figure}[h!]
-          \centering
-          \includegraphics[width=0.4\textwidth]{img/is.png}
-          {\tiny Generalized Petersen graph GP(12,4)}
-        \end{figure}
-      \end{frame}
-
   \section{Algorithm}
     \subsection{Overview}
       \begin{frame}{Divide and Conquer}
@@ -231,13 +236,13 @@ Belo Horizonte, Brazil
       \begin{frame}{Dividing into Squares}
         \begin{figure}[h!]
           \centering
-            \includegraphics[width=0.75\textwidth]{img/2-4-fig.png}
+            \includegraphics[width=0.7\textwidth]{img/2-4-fig.png}
         \end{figure}   
       \end{frame}
       \begin{frame}{Split}
         \begin{figure}[h!]
           \centering
-            \includegraphics[width=1.0\textwidth]{img/2-3-fig.png}
+            \includegraphics[width=0.9\textwidth]{img/2-3-fig.png}
         \end{figure}    
       \end{frame}
 
@@ -432,7 +437,7 @@ Belo Horizonte, Brazil
 
   \section{Conclusion}
     \subsection{Extension to $d$ dimensions}
-      \begin{frame}{Independent Set is not so hard on disk graphs and ...}
+      \begin{frame}{Independent Set is \"not so\" hard on disk graphs and ...}
         \begin{block}{... the PTAS can be generalized to $d$ dimensions}
           There is a PTAS for MWIS in disk-like graphs,
           provided that a disk-like representation of the graph is given.

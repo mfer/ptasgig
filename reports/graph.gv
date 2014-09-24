@@ -1,0 +1,11 @@
+digraph mwis {
+
+    rankdir = LR;
+    node [shape = circle];
+
+    1 [label = "A0"];
+    2 [label = "B0"];
+
+
+
+}

@@ -2,15 +2,15 @@
 \select@language {english}
 \beamer@sectionintoc {1}{Preliminaries}{3}{0}{1}
 \beamer@subsectionintoc {1}{1}{PTASGIG}{3}{0}{1}
-\beamer@sectionintoc {2}{Model}{10}{0}{2}
-\beamer@subsectionintoc {2}{1}{Intersection graphs of {\it disk-like objects} }{10}{0}{2}
-\beamer@sectionintoc {3}{Problem Definition}{13}{0}{3}
-\beamer@subsectionintoc {3}{1}{MWIS}{13}{0}{3}
-\beamer@sectionintoc {4}{Algorithm}{14}{0}{4}
-\beamer@subsectionintoc {4}{1}{Overview}{14}{0}{4}
-\beamer@subsectionintoc {4}{2}{Pseudo-Code}{16}{0}{4}
-\beamer@subsectionintoc {4}{3}{Complexity}{20}{0}{4}
-\beamer@sectionintoc {5}{Approximation proof for the algorithm}{21}{0}{5}
-\beamer@subsectionintoc {5}{1}{Lower Bound}{21}{0}{5}
-\beamer@sectionintoc {6}{Conclusion}{25}{0}{6}
-\beamer@subsectionintoc {6}{1}{Extension to $d$ dimensions}{25}{0}{6}
+\beamer@sectionintoc {2}{Problem Definition}{10}{0}{2}
+\beamer@subsectionintoc {2}{1}{MWIS}{10}{0}{2}
+\beamer@sectionintoc {3}{Model}{12}{0}{3}
+\beamer@subsectionintoc {3}{1}{Intersection graphs of {\it disk-like objects} }{12}{0}{3}
+\beamer@sectionintoc {4}{Algorithm}{15}{0}{4}
+\beamer@subsectionintoc {4}{1}{Overview}{15}{0}{4}
+\beamer@subsectionintoc {4}{2}{Pseudo-Code}{17}{0}{4}
+\beamer@subsectionintoc {4}{3}{Complexity}{21}{0}{4}
+\beamer@sectionintoc {5}{Approximation proof for the algorithm}{22}{0}{5}
+\beamer@subsectionintoc {5}{1}{Lower Bound}{22}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{26}{0}{6}
+\beamer@subsectionintoc {6}{1}{Extension to $d$ dimensions}{26}{0}{6}
