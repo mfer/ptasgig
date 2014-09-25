@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.18)  24 SEP 2014 13:06
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.8.11)  25 SEP 2014 10:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -929,7 +929,7 @@ LaTeX Font Warning: Font shape `T1/cmss/m/n' in size <4> not available
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./seminar.toc) [2
 
 ]
-<img/ig.png, id=125, 239.89626pt x 180.675pt>
+<img/ig.png, id=126, 239.89626pt x 180.675pt>
 File: img/ig.png Graphic file (type png)
  <use img/ig.png>
 Package pdftex.def Info: img/ig.png used on input line 66.
@@ -940,7 +940,7 @@ Overfull \vbox (0.27274pt too high) detected at line 66
 
 [3
 
- <./img/ig.png>] <img/cover.png, id=139, 1059.96pt x 713.66624pt>
+ <./img/ig.png>] <img/cover.png, id=140, 1059.96pt x 713.66624pt>
 File: img/cover.png Graphic file (type png)
 
 <use img/cover.png>
@@ -949,7 +949,7 @@ Package pdftex.def Info: img/cover.png used on input line 73.
  [4
 
  <./img/cover.png>]
-<img/scholar.png, id=150, 633.36626pt x 118.4425pt>
+<img/scholar.png, id=151, 633.36626pt x 118.4425pt>
 File: img/scholar.png Graphic file (type png)
  <use img/scholar.png>
 Package pdftex.def Info: img/scholar.png used on input line 80.
@@ -957,13 +957,13 @@ Package pdftex.def Info: img/scholar.png used on input line 80.
 
 [5
 
- <./img/scholar.png>] <img/label.png, id=160, 1118.1775pt x 407.5225pt>
+ <./img/scholar.png>] <img/label.png, id=161, 1118.1775pt x 407.5225pt>
 File: img/label.png Graphic file (type png)
 
 <use img/label.png>
 Package pdftex.def Info: img/label.png used on input line 91.
 (pdftex.def)             Requested size: 342.2953pt x 124.75122pt.
- <img/cell-networks.png, id=161, 811.03pt x 117.43875pt>
+ <img/cell-networks.png, id=162, 811.03pt x 117.43875pt>
 File: img/cell-networks.png Graphic file (type png)
 
 <use img/cell-networks.png>
@@ -972,7 +972,7 @@ Package pdftex.def Info: img/cell-networks.png used on input line 91.
  [6
 
  <./img/label.png> <./img/cell-networks.png>]
-<img/autolabel.png, id=172, 811.03pt x 809.0225pt>
+<img/autolabel.png, id=173, 811.03pt x 809.0225pt>
 File: img/autolabel.png Graphic file (type png)
  <use img/autolabel.png>
 Package pdftex.def Info: img/autolabel.png used on input line 100.
@@ -981,7 +981,7 @@ Package pdftex.def Info: img/autolabel.png used on input line 100.
 [7
 
  <./img/autolabel.png>]
-<img/callControl.png, id=183, 906.38625pt x 345.29pt>
+<img/callControl.png, id=184, 906.38625pt x 345.29pt>
 File: img/callControl.png Graphic file (type png)
 
 <use img/callControl.png>
@@ -992,7 +992,7 @@ Package pdftex.def Info: img/callControl.png used on input line 109.
  <./img/callControl.png>] [9
 
 ]
-<img/is.png, id=206, 682.55pt x 682.55pt>
+<img/is.png, id=207, 682.55pt x 682.55pt>
 File: img/is.png Graphic file (type png)
  <use img/is.png>
 Package pdftex.def Info: img/is.png used on input line 134.
@@ -1000,7 +1000,7 @@ Package pdftex.def Info: img/is.png used on input line 134.
  [10
 
  <./img/is.png>]
-<img/np-hardness-story.png, id=215, 1577.895pt x 1200.485pt>
+<img/np-hardness-story.png, id=216, 1577.895pt x 1200.485pt>
 File: img/np-hardness-story.png Graphic file (type png)
 
 <use img/np-hardness-story.png>
@@ -1009,20 +1009,20 @@ Package pdftex.def Info: img/np-hardness-story.png used on input line 140.
  [11
 
  <./img/np-hardness-story.png>]
-<img/udg.png, id=225, 436.029pt x 401.5pt>
+<img/udg.png, id=226, 436.029pt x 401.5pt>
 File: img/udg.png Graphic file (type png)
  <use img/udg.png>
 Package pdftex.def Info: img/udg.png used on input line 150.
 (pdftex.def)             Requested size: 171.14764pt x 157.59521pt.
  [12
 
- <./img/udg.png>] <img/disklike.png, id=234, 250.9375pt x 254.9525pt>
+ <./img/udg.png>] <img/disklike.png, id=235, 250.9375pt x 254.9525pt>
 File: img/disklike.png Graphic file (type png)
  <use img/disklike.png>
 Package pdftex.def Info: img/disklike.png used on input line 161.
 (pdftex.def)             Requested size: 87.28697pt x 88.68228pt.
 
-<img/model1.png, id=235, 1062.97125pt x 338.26375pt>
+<img/model1.png, id=236, 1062.97125pt x 338.26375pt>
 File: img/model1.png Graphic file (type png)
  <use img/model1.png>
 Package pdftex.def Info: img/model1.png used on input line 161.
@@ -1031,7 +1031,7 @@ Package pdftex.def Info: img/model1.png used on input line 161.
 [13
 
  <./img/disklike.png> <./img/model1.png>]
-<img/2-1-fig.png, id=247, 965.6075pt x 663.47874pt>
+<img/2-1-fig.png, id=248, 965.6075pt x 663.47874pt>
 File: img/2-1-fig.png Graphic file (type png)
  <use img/2-1-fig.png>
 Package pdftex.def Info: img/2-1-fig.png used on input line 168.
@@ -1039,7 +1039,7 @@ Package pdftex.def Info: img/2-1-fig.png used on input line 168.
 
 [14
 
- <./img/2-1-fig.png>] <img/2-5-fig.png, id=257, 1182.4175pt x 441.65pt>
+ <./img/2-1-fig.png>] <img/2-5-fig.png, id=258, 1182.4175pt x 441.65pt>
 File: img/2-5-fig.png Graphic file (type png)
 
 <use img/2-5-fig.png>
@@ -1065,7 +1065,7 @@ LaTeX Font Warning: Command \tiny invalid in math mode on input line 233.
 
 [16
 
-] <img/2-4-fig.png, id=279, 726.715pt x 657.45625pt>
+] <img/2-4-fig.png, id=280, 726.715pt x 657.45625pt>
 File: img/2-4-fig.png Graphic file (type png)
  <use img/2-4-fig.png>
 Package pdftex.def Info: img/2-4-fig.png used on input line 241.
@@ -1076,7 +1076,7 @@ Overfull \vbox (0.25699pt too high) detected at line 241
 
 [17
 
- <./img/2-4-fig.png>] <img/2-3-fig.png, id=288, 1009.7725pt x 687.56876pt>
+ <./img/2-4-fig.png>] <img/2-3-fig.png, id=289, 1009.7725pt x 687.56876pt>
 File: img/2-3-fig.png Graphic file (type png)
 
 <use img/2-3-fig.png>
@@ -1085,7 +1085,7 @@ Package pdftex.def Info: img/2-3-fig.png used on input line 247.
  [18
 
  <./img/2-3-fig.png>]
-<img/2-7-fig.png, id=298, 741.77126pt x 754.82pt>
+<img/2-7-fig.png, id=299, 741.77126pt x 754.82pt>
 File: img/2-7-fig.png Graphic file (type png)
  <use img/2-7-fig.png>
 Package pdftex.def Info: img/2-7-fig.png used on input line 254.
@@ -1096,7 +1096,7 @@ Overfull \vbox (9.88803pt too high) detected at line 254
 
 [19
 
- <./img/2-7-fig.png>] <img/2-6-fig.png, id=309, 1177.39874pt x 282.05376pt>
+ <./img/2-7-fig.png>] <img/2-6-fig.png, id=310, 1177.39874pt x 282.05376pt>
 File: img/2-6-fig.png Graphic file (type png)
 
 <use img/2-6-fig.png>
@@ -1106,49 +1106,117 @@ Package pdftex.def Info: img/2-6-fig.png used on input line 260.
 
  <./img/2-6-fig.png>] [21
 
-] [22
-
 ]
-<img/2-1-lem.png, id=335, 1261.71375pt x 461.725pt>
+<img/2-1-lem.png, id=328, 1261.71375pt x 461.725pt>
 File: img/2-1-lem.png Graphic file (type png)
  <use img/2-1-lem.png>
-Package pdftex.def Info: img/2-1-lem.png used on input line 420.
+Package pdftex.def Info: img/2-1-lem.png used on input line 359.
 (pdftex.def)             Requested size: 342.2953pt x 125.25922pt.
 
-[23
+[22
 
- <./img/2-1-lem.png>] <img/upperBound.png, id=345, 1218.5525pt x 232.87pt>
+ <./img/2-1-lem.png>] <img/2-1-lem-1.png, id=337, 1409.265pt x 2123.935pt>
+File: img/2-1-lem-1.png Graphic file (type png)
+
+<use img/2-1-lem-1.png>
+Package pdftex.def Info: img/2-1-lem-1.png used on input line 378.
+(pdftex.def)             Requested size: 136.91862pt x 206.34554pt.
+ [23
+
+ <./img/2-1-lem-1.png>]
+File: img/2-1-lem-1.png Graphic file (type png)
+ <use img/2-1-lem-1.png>
+Package pdftex.def Info: img/2-1-lem-1.png used on input line 395.
+(pdftex.def)             Requested size: 102.68962pt x 154.75104pt.
+
+<img/2-1-lem-2.png, id=348, 1425.325pt x 1923.185pt>
+File: img/2-1-lem-2.png Graphic file (type png)
+ <use img/2-1-lem-2.png>
+Package pdftex.def Info: img/2-1-lem-2.png used on input line 395.
+(pdftex.def)             Requested size: 154.03183pt x 207.82414pt.
+
+[24
+
+ <./img/2-1-lem-2.png>]
+<img/upperBound.png, id=358, 1218.5525pt x 232.87pt>
 File: img/upperBound.png Graphic file (type png)
-
-<use img/upperBound.png>
-Package pdftex.def Info: img/upperBound.png used on input line 429.
+ <use img/upperBound.png>
+Package pdftex.def Info: img/upperBound.png used on input line 404.
 (pdftex.def)             Requested size: 342.2953pt x 65.4128pt.
- [24
 
- <./img/upperBound.png>] [25
+[25
+
+ <./img/upperBound.png>] [26
 
 ]
+<img/2-4-def.png, id=382, 879.285pt x 208.78pt>
+File: img/2-4-def.png Graphic file (type png)
+ <use img/2-4-def.png>
+Package pdftex.def Info: img/2-4-def.png used on input line 424.
+(pdftex.def)             Requested size: 308.06367pt x 73.14735pt.
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 439.
+<img/2-6-def.png, id=383, 874.26625pt x 369.38pt>
+File: img/2-6-def.png Graphic file (type png)
+ <use img/2-6-def.png>
+Package pdftex.def Info: img/2-6-def.png used on input line 424.
+(pdftex.def)             Requested size: 308.06367pt x 130.15855pt.
 
+[27
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 439.
-
-[26
-
-] [27
-
-] <img/mwis.png, id=383, 511.9125pt x 119.44624pt>
-File: img/mwis.png Graphic file (type png)
- <use img/mwis.png>
-Package pdftex.def Info: img/mwis.png used on input line 466.
-(pdftex.def)             Requested size: 171.14764pt x 39.93317pt.
+ <./img/2-4-def.png> <./img/2-6-def.png>]
+<img/2-9-lem-1.png, id=393, 1252.68pt x 404.51125pt>
+File: img/2-9-lem-1.png Graphic file (type png)
+ <use img/2-9-lem-1.png>
+Package pdftex.def Info: img/2-9-lem-1.png used on input line 431.
+(pdftex.def)             Requested size: 342.2953pt x 110.5342pt.
 
 [28
 
- <./img/mwis.png>]
+ <./img/2-9-lem-1.png>]
+<img/2-9-lem-2.png, id=403, 1257.69875pt x 736.7525pt>
+File: img/2-9-lem-2.png Graphic file (type png)
+ <use img/2-9-lem-2.png>
+Package pdftex.def Info: img/2-9-lem-2.png used on input line 437.
+(pdftex.def)             Requested size: 342.2953pt x 200.51094pt.
+
+[29
+
+ <./img/2-9-lem-2.png>] <img/2-9-lem-3.png, id=413, 883.3pt x 631.35875pt>
+File: img/2-9-lem-3.png Graphic file (type png)
+
+<use img/2-9-lem-3.png>
+Package pdftex.def Info: img/2-9-lem-3.png used on input line 443.
+(pdftex.def)             Requested size: 308.06367pt x 220.19853pt.
+
+Overfull \vbox (3.68489pt too high) detected at line 443
+ []
+
+[30
+
+ <./img/2-9-lem-3.png>] [31
+
+]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 456.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 456.
+
+[32
+
+] <img/mwis.png, id=439, 511.9125pt x 119.44624pt>
+File: img/mwis.png Graphic file (type png)
+ <use img/mwis.png>
+Package pdftex.def Info: img/mwis.png used on input line 473.
+(pdftex.def)             Requested size: 171.14764pt x 39.93317pt.
+
+[33
+
+ <./img/mwis.png>] [34
+
+]
 \tf@nav=\write6
 \openout6 = `seminar.nav'.
 
@@ -1158,28 +1226,28 @@ Package pdftex.def Info: img/mwis.png used on input line 466.
 \tf@snm=\write8
 \openout8 = `seminar.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 468.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 468.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 484.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 484.
  (./seminar.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 468.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 468.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 484.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 484.
 Package rerunfilecheck Info: File `seminar.out' has not changed.
-(rerunfilecheck)             Checksum: 3E8F258BE22AEF6A2F6A6ED0972DBDCE;946.
+(rerunfilecheck)             Checksum: 13EEE1D73AD3DFC98DABAD0EF05DA3C9;946.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 468.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 484.
  ) 
 Here is how much of TeX's memory you used:
- 17056 strings out of 495004
- 310727 string characters out of 6180662
+ 17118 strings out of 495004
+ 311673 string characters out of 6180662
  387059 words of memory out of 5000000
- 19749 multiletter control sequences out of 15000+600000
+ 19790 multiletter control sequences out of 15000+600000
  34049 words of font info for 85 fonts, out of 8000000 for 9000
  16 hyphenation exceptions out of 8191
- 49i,18n,53p,418b,450s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 49i,18n,53p,418b,569s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/share/texlive/texmf-
@@ -1191,23 +1259,24 @@ sfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmss17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 ss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
 b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr
-/share/texmf/fonts/type1/public/cm-super/sfsi0600.pfb></usr/share/texmf/fonts/t
-ype1/public/cm-super/sfsi0700.pfb></usr/share/texmf/fonts/type1/public/cm-super
-/sfsi0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi1000.pfb></usr/
-share/texmf/fonts/type1/public/cm-super/sfsi1095.pfb></usr/share/texmf/fonts/ty
-pe1/public/cm-super/sfsi2074.pfb></usr/share/texmf/fonts/type1/public/cm-super/
-sfsi2488.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0600.pfb></usr/s
-hare/texmf/fonts/type1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/typ
-e1/public/cm-super/sfss1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
-fss1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/sh
-are/texmf/fonts/type1/public/cm-super/sfss1728.pfb></usr/share/texmf/fonts/type
-1/public/cm-super/sfsx0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sf
-sx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1095.pfb></usr/sha
-re/texmf/fonts/type1/public/cm-super/sfsx1440.pfb>
-Output written on seminar.pdf (28 pages, 6276399 bytes).
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/
+texmf/fonts/type1/public/cm-super/sfsi0600.pfb></usr/share/texmf/fonts/type1/pu
+blic/cm-super/sfsi0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi08
+00.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi1000.pfb></usr/share/t
+exmf/fonts/type1/public/cm-super/sfsi1095.pfb></usr/share/texmf/fonts/type1/pub
+lic/cm-super/sfsi2074.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsi248
+8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0600.pfb></usr/share/te
+xmf/fonts/type1/public/cm-super/sfss0800.pfb></usr/share/texmf/fonts/type1/publ
+ic/cm-super/sfss1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1095
+.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1440.pfb></usr/share/tex
+mf/fonts/type1/public/cm-super/sfss1728.pfb></usr/share/texmf/fonts/type1/publi
+c/cm-super/sfsx0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1000.
+pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1095.pfb></usr/share/texm
+f/fonts/type1/public/cm-super/sfsx1440.pfb>
+Output written on seminar.pdf (34 pages, 12397706 bytes).
 PDF statistics:
- 502 PDF objects out of 1000 (max. 8388607)
- 391 compressed objects within 4 object streams
- 75 named destinations out of 1000 (max. 500000)
- 276 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 574 PDF objects out of 1000 (max. 8388607)
+ 441 compressed objects within 5 object streams
+ 89 named destinations out of 1000 (max. 500000)
+ 311 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -11,8 +11,8 @@
 \beamer@subsectionintoc {4}{2}{Pseudo-Code}{17}{0}{4}
 \beamer@subsectionintoc {4}{3}{Complexity}{21}{0}{4}
 \beamer@sectionintoc {5}{Approximation proof for the algorithm}{22}{0}{5}
-\beamer@subsectionintoc {5}{1}{Lower Bound}{22}{0}{5}
-\beamer@sectionintoc {6}{Conclusion}{26}{0}{6}
-\beamer@subsectionintoc {6}{1}{Extension to $d$ dimensions}{26}{0}{6}
-\beamer@sectionintoc {7}{Practical project}{27}{0}{7}
-\beamer@subsectionintoc {7}{1}{Possible approaches}{27}{0}{7}
+\beamer@subsectionintoc {5}{1}{Lower bound}{22}{0}{5}
+\beamer@subsectionintoc {5}{2}{Correcteness}{27}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{31}{0}{6}
+\beamer@subsectionintoc {6}{1}{MWIS PTAS}{31}{0}{6}
+\beamer@subsectionintoc {6}{2}{Extension to $d$ dimensions}{32}{0}{6}

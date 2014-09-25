@@ -349,74 +349,49 @@ Belo Horizonte, Brazil
 
 
   \section{Approximation proof for the algorithm}
-    \subsection{Lower Bound}
-      \begin{frame}{Existence and Bound}
-        \begin{block}{Theorem 2.10}
-          There is a PTAS for MWIS in disk graphs,
-          provided that a disk representation of the graph is given.
-          The running-time for achieving approximation
-          ratio $1 + \epsilon$ is $$n^{O\left(\frac{1}{\epsilon^{2}}\right)}$$ for a disk graph with $n$ disks.
-        \end{block}
-      \end{frame}    
 
-\/*    
-    \subsection{Correctness}
-      \begin{frame}{Correctness}
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=1\textwidth]{img/2-4-def.png}
-        \end{figure}   
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=1\textwidth]{img/2-6-def.png}
-        \end{figure}   
-      \end{frame}        
-
-      \begin{frame}{Correctness}
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=1.0\textwidth]{img/2-9-lem-1.png}
-        \end{figure}   
-      \end{frame}        
-
-      \begin{frame}{Correctness}
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=1.0\textwidth]{img/2-9-lem-2.png}
-        \end{figure}   
-      \end{frame}        
-      \begin{frame}{Correctness}
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=0.75\textwidth]{img/2-4-fig.png}
-        \end{figure}   
-      \end{frame}        
-
-      \begin{frame}{Correctness}
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=0.9\textwidth]{img/2-9-lem-3.png}
-        \end{figure}   
-      \end{frame}
-      \begin{frame}{Correctness}
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=0.75\textwidth]{img/2-7-fig.png}
-        \end{figure}   
-      \end{frame}        
-
-      \begin{frame}{Correctness}
-        \begin{figure}[h!]
-          \centering
-            \includegraphics[width=1.0\textwidth]{img/2-9-lem-4.png}
-        \end{figure}   
-      \end{frame}
-*/
-      \begin{frame}{Proof}
+    \subsection{Lower bound}
+      \begin{frame}{Subdividing the plane}
         \begin{figure}[h!]
           \centering
             \includegraphics[width=1.0\textwidth]{img/2-1-lem.png}
         \end{figure}   
+      \end{frame}
+
+      \begin{frame}{$w(T^*) \geq \left( 1 - \frac{1}{k} \right) OPT(\mathcal{D})$}
+        \begin{columns}
+          \begin{column}{.5\linewidth}
+            \begin{figure}[h!]
+              \centering
+                \includegraphics[width=0.8\textwidth]{img/2-1-lem-1.png}
+            \end{figure}   
+          \end{column}
+          \begin{column}{.5\linewidth}
+            \begin{block}{}
+              Let $S^* \subseteq \mathcal{D}$ be any set of disjoint disks with total weight $OPT(\mathcal{D})$.
+            \end{block}
+            \begin{block}{}
+              And $\mathcal{D}(r,s)$ defined as the set o disks that is obtained from $\mathcal{D}$ by deleting all disks that hit a line that is on the same level as the disk and that is active for $(r,s)$.
+            \end{block}
+          \end{column}
+        \end{columns}
+      \end{frame}
+
+      \begin{frame}{ $U^* \subseteq \mathcal{D}(r,s)$ and $w(U^*) \geq \left( 1 - \frac{1}{k} \right)^2 OPT(\mathcal{D})$}
+        \begin{columns}
+          \begin{column}{.5\linewidth}
+            \begin{figure}[h!]
+              \centering
+                \includegraphics[width=0.6\textwidth]{img/2-1-lem-1.png}
+            \end{figure}   
+          \end{column}
+          \begin{column}{.5\linewidth}
+            \begin{figure}[h!]
+              \centering
+                \includegraphics[width=0.9\textwidth]{img/2-1-lem-2.png}
+            \end{figure}   
+          \end{column}
+        \end{columns}
       \end{frame}
 
       \begin{frame}{Approximation Ratio $\rho$}
@@ -429,13 +404,55 @@ Belo Horizonte, Brazil
       \end{frame}
 
       \begin{frame}{Running-time function of $\epsilon$}
-        $$\epsilon = \frac{3}{k-1} \Rightarrow k = \ceil*{\frac{3}{\epsilon}+1}$$
+        $$\epsilon = \frac{3}{k-1} \Rightarrow k = \ceil*{\frac{3}{\epsilon}}+1$$
         \begin{align*}
           \mbox{\Huge{$n^{O(k^2)} \Rightarrow n^{O\left(\frac{1}{\epsilon^{2}}\right)}$}}
         \end{align*}
       \end{frame}
 
+    \subsection{Correcteness}
+
+      \begin{frame}{An optimal independent set set can be computed}
+        \begin{figure}[h!]
+          \centering
+            \includegraphics[width=0.9\textwidth]{img/2-4-def.png}
+        \end{figure}   
+        \begin{figure}[h!]
+          \centering
+            \includegraphics[width=0.9\textwidth]{img/2-6-def.png}
+        \end{figure}   
+      \end{frame}        
+
+      \begin{frame}{Good Values}
+        \begin{figure}[h!]
+          \centering
+            \includegraphics[width=1.0\textwidth]{img/2-9-lem-1.png}
+        \end{figure}   
+      \end{frame}        
+      \begin{frame}{Map phase}
+        \begin{figure}[h!]
+          \centering
+            \includegraphics[width=1.0\textwidth]{img/2-9-lem-2.png}
+        \end{figure}   
+      \end{frame}        
+      \begin{frame}{Reduce phase}
+        \begin{figure}[h!]
+          \centering
+            \includegraphics[width=0.9\textwidth]{img/2-9-lem-3.png}
+        \end{figure}   
+      \end{frame}
+
   \section{Conclusion}
+    \subsection{MWIS PTAS}  
+      \begin{frame}{Independent Set is 'not so' hard on disk graphs}
+        \begin{block}{}
+          There is a PTAS for MWIS in disk graphs,
+          provided that a disk representation of the graph is given.
+          The running-time for achieving approximation
+          ratio $1 + \epsilon$ is $$n^{O\left(\frac{1}{\epsilon^{2}}\right)}$$ for a disk graph with $n$ disks.
+        \end{block}
+      \end{frame}    
+
     \subsection{Extension to $d$ dimensions}
       \begin{frame}{Independent Set is 'not so' hard on disk graphs and ...}
         \begin{block}{... the PTAS can be generalized to $d$ dimensions}
@@ -446,16 +463,6 @@ Belo Horizonte, Brazil
         \end{block}
       \end{frame}    
 
-  \section{Practical project}
-    \subsection{Possible approaches}  
-      \begin{frame}{Experimental Part}
-	\begin{enumerate}
-		\item I will implement a simulation of the proposed algorithm and present an analysis of its performance in different scenarios and problems instances.
-		\item And maybe, I will use the proposed algorithm to solve another problem.
-	\end{enumerate}
-      \end{frame}    
-
-
   \section{}
     \subsection{}  
       \begin{frame}{Questions}
@@ -463,6 +470,15 @@ Belo Horizonte, Brazil
           \centering
             \includegraphics[width=0.5\textwidth]{img/mwis.png}
         \end{figure}
+      \end{frame}    
+
+  \section{}
+    \subsection{}  
+      \begin{frame}{Practical project - Possible approaches}
+        \begin{enumerate}
+          \item I will implement a simulation of the proposed algorithm and present an analysis of its performance in different scenarios and problems instances.
+          \item And maybe, I will use the proposed algorithm to solve another problem.
+        \end{enumerate}
       \end{frame}    
 
 \end{document}

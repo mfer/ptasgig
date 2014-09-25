@@ -9,8 +9,8 @@
 \BOOKMARK [3][]{Outline0.4.2.17}{Pseudo-Code}{Outline0.4}% 9
 \BOOKMARK [3][]{Outline0.4.3.21}{Complexity}{Outline0.4}% 10
 \BOOKMARK [2][]{Outline0.5}{Approximation proof for the algorithm}{}% 11
-\BOOKMARK [3][]{Outline0.5.1.22}{Lower Bound}{Outline0.5}% 12
-\BOOKMARK [2][]{Outline0.6}{Conclusion}{}% 13
-\BOOKMARK [3][]{Outline0.6.1.26}{Extension to d dimensions}{Outline0.6}% 14
-\BOOKMARK [2][]{Outline0.7}{Practical project}{}% 15
-\BOOKMARK [3][]{Outline0.7.1.27}{Possible approaches}{Outline0.7}% 16
+\BOOKMARK [3][]{Outline0.5.1.22}{Lower bound}{Outline0.5}% 12
+\BOOKMARK [3][]{Outline0.5.2.27}{Correcteness}{Outline0.5}% 13
+\BOOKMARK [2][]{Outline0.6}{Conclusion}{}% 14
+\BOOKMARK [3][]{Outline0.6.1.31}{MWIS PTAS}{Outline0.6}% 15
+\BOOKMARK [3][]{Outline0.6.2.32}{Extension to d dimensions}{Outline0.6}% 16
