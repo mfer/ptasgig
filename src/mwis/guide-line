@@ -1,0 +1,40 @@
+---data structures
+square
+level
+set
+disk
+integer
+table
+table_entry
+
+---algorythms
+gig_OF_level_INTERSECTING_square
+set_ARE_DISJOINT
+set_INTERSECTS_square
+table_ON_square_OF_set
+set_IS_CONTAINED_IN_square
+set_INTERSECTS_BOUNDARY_OF_square
+
+set_UNION_set
+UNDEFINE
+table_IS_UNDEFINED
+table_ON_square_AND_set_OF_square_AND_set
+
+---algorythm 2.4
+for ALL_J
+	AT_ON_S_AND_I_OF_Sprime_gh_AND_J = UNDEFINE
+
+Q = D_rs_OF_j_INTERSECTING_Sprime_gh
+
+for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
+	if I_UNION_U_ARE_DISJOINT then
+		Iprime = I_INTERSECTS_Sprime_gh
+		X = T_ON_Sprime_gh_OF_Iprime_UNION_U
+		X = X_UNION_U_IS_CONTAINED_IN_Sprime_gh
+		J = U_INTERSECTS_BOUNDARY_OF_Sprime_gh
+		if AT_ON_S_AND_I_OF_Sprime_gh_AND_J_IS_UNDEFINED or
+			w(X)_>_w(AT_S_AND_I_Sprime_gh_AND_J) then
+				AT_ON_S_AND_I_OF_Sprime_gh_AND_J = X
+		fi
+	fi
+od
