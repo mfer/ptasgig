@@ -25,13 +25,17 @@
 /**
  * Write a report about the execution of the algorithm.
  *
- * @param mwis_context, the mwis's context data structure after
- *        successful execution.
+ * @param mwis_context, the Optimal Binary Search Tree's context data
+ *        structure after successful execution.
  * @return if report creation was successful.
  */
 bool mwis_report(mwis_context* c);
-void mwis_execution(mwis_context* c, int k);
-void mwis_table(matrix* m, bool d, int k, FILE* stream);
-void mwis_graph(matrix* m, char** n);
+void mwis_nodes(mwis_context* c, FILE* stream);
+void mwis_execution(mwis_context* c, FILE* stream);
+void mwis_table(matrix* m, bool a, FILE* stream);
+int mwis_graph(mwis_context* c);
+int find_nodes(matrix* r, int i, int j, FILE* stream);
+int find_lnodes(matrix* r, int i, int j, FILE* stream, int level);
+int find_rnodes(matrix* r, int i, int j, FILE* stream, int level);
 
 #endif

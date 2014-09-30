@@ -123,7 +123,7 @@ unsigned int matrix_sizeof(matrix* m)
 
 void matrix_free(matrix* m)
 {
-    /* Check if matrix has somethign */
+    /* Check if matrix has something */
     if((m != NULL) && (m->data != NULL)) {
 
         /* Release the columns arrays */

@@ -23,9 +23,9 @@
 #include "matrix.h"
 
 /**
- * MWIS's algorithm context data structure.
+ * Optimal Binary Search Tree algorithm context data structure.
  */
-typedef struct {
+typedef struct{
 
     /* Common */
     int status;
@@ -34,21 +34,25 @@ typedef struct {
     FILE* report_buffer;
 
     /* Tables */
-    matrix* table_d;
-    matrix* table_p;
+    matrix* table_a;
+    matrix* table_r;
 
+    /*Number of Keys*/
+    int keys;
     char** names;
-    int nodes;
+
+    /* Probabilities */
+    float* keys_probabilities;
 
 } mwis_context;
 
-mwis_context* mwis_context_new(int nodes);
+mwis_context* mwis_context_new(int keys);
 void mwis_context_free(mwis_context* c);
 
 /**
- * Perform MWIS algorithm with given context.
+ * Perform Optimal Binary Search Tree algorithm with given context.
  *
- * @param mwis_context, the mwis's context data structure.
+ * @param mwis_context, the Optimal Binary Search Tree's context data structure.
  * @return TRUE if execution was successful or FALSE if and error ocurred. Check
  *         'status' flag in context to know what went wrong.
  */

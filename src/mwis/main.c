@@ -20,26 +20,28 @@
 #include "latex.h"
 #include "dialogs.h"
 #include <gtk/gtk.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 /* GUI */
 GtkWindow* window;
-GtkSpinButton* nodes;
-GtkTreeView* input;
-GtkImage* graph;
+
+GtkTreeView* nodes_view;
+GtkListStore* nodes_model;
+
+GtkLabel* total_label;
 
 GtkFileChooser* load_dialog;
 GtkFileChooser* save_dialog;
 
 /* Context */
 mwis_context* c = NULL;
-matrix* adj_matrix = NULL;
-char** names = NULL;
 
 /* Functions */
-bool change_matrix(int size);
-void change_matrix_cb(GtkSpinButton* spinbutton, gpointer user_data);
-void update_graph();
+void enable_sort(bool e);
+void add_row(GtkToolButton *toolbutton, gpointer user_data);
+void remove_row(GtkToolButton *toolbutton, gpointer user_data);
+void edit_started_cb(GtkCellRenderer* renderer, GtkCellEditable* editable,
+                     gchar* path, gpointer user_data);
+bool is_unique(char* new, int at_row);
 void cell_edited_cb(GtkCellRendererText* renderer, gchar* path,
                     gchar* new_text, gpointer user_data);
 void process(GtkButton* button, gpointer user_data);
@@ -71,9 +73,9 @@ int main(int argc, char **argv)
 
     /* Get pointers to objects */
     window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
-    nodes = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "nodes"));
-    input = GTK_TREE_VIEW(gtk_builder_get_object(builder, "input"));
-    graph = GTK_IMAGE(gtk_builder_get_object(builder, "graph"));
+    nodes_view = GTK_TREE_VIEW(gtk_builder_get_object(builder, "nodes_view"));
+    nodes_model = GTK_LIST_STORE(gtk_builder_get_object(builder, "nodes_model"));
+    total_label = GTK_LABEL(gtk_builder_get_object(builder, "total_label"));
 
     load_dialog = GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "load_dialog"));
     save_dialog = GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "save_dialog"));
@@ -84,11 +86,49 @@ int main(int argc, char **argv)
     gtk_file_chooser_add_filter(load_dialog, file_filter);
     gtk_file_chooser_add_filter(save_dialog, file_filter);
 
+    /* Configure cell renderers callback */
+    GtkCellRenderer* name_renderer = GTK_CELL_RENDERER(
+                            gtk_builder_get_object(builder, "name_renderer"));
+    g_signal_connect(G_OBJECT(name_renderer),
+                         "edited", G_CALLBACK(cell_edited_cb),
+                         GINT_TO_POINTER(0));
+
+    GtkCellRenderer* x_renderer = GTK_CELL_RENDERER(
+                            gtk_builder_get_object(builder, "x_renderer"));
+    g_signal_connect(G_OBJECT(x_renderer),
+                         "edited", G_CALLBACK(cell_edited_cb),
+                         GINT_TO_POINTER(1));
+    edit_started_cb(x_renderer, NULL, NULL, NULL);
+
+    GtkCellRenderer* y_renderer = GTK_CELL_RENDERER(
+                            gtk_builder_get_object(builder, "y_renderer"));
+    g_signal_connect(G_OBJECT(y_renderer),
+                         "edited", G_CALLBACK(cell_edited_cb),
+                         GINT_TO_POINTER(2));
+    edit_started_cb(y_renderer, NULL, NULL, NULL);
+
+    GtkCellRenderer* diameter_renderer = GTK_CELL_RENDERER(
+                            gtk_builder_get_object(builder, "diameter_renderer"));
+    g_signal_connect(G_OBJECT(diameter_renderer),
+                         "edited", G_CALLBACK(cell_edited_cb),
+                         GINT_TO_POINTER(3));
+    edit_started_cb(diameter_renderer, NULL, NULL, NULL);
+
+    GtkCellRenderer* weight_renderer = GTK_CELL_RENDERER(
+                            gtk_builder_get_object(builder, "weight_renderer"));
+    g_signal_connect(G_OBJECT(weight_renderer),
+                         "edited", G_CALLBACK(cell_edited_cb),
+                         GINT_TO_POINTER(4));
+    edit_started_cb(weight_renderer, NULL, NULL, NULL);
+
     /* Connect signals */
     gtk_builder_connect_signals(builder, NULL);
 
     /* Initialize interface */
-    change_matrix(2);
+    add_row(NULL, NULL);
+
+    /* Sort model */
+    enable_sort(true);
 
     g_object_unref(G_OBJECT(builder));
     gtk_widget_show(GTK_WIDGET(window));
@@ -97,195 +137,127 @@ int main(int argc, char **argv)
     return(0);
 }
 
-bool change_matrix(int size)
+void enable_sort(bool e)
 {
-    /* Validate input */
-    if(size < 2) {
-        return false;
+    if(e) {
+        gtk_tree_sortable_set_sort_column_id(
+            GTK_TREE_SORTABLE(nodes_model), 0, GTK_SORT_ASCENDING);
+    } else {
+        gtk_tree_sortable_set_sort_column_id(
+            GTK_TREE_SORTABLE(nodes_model),
+            GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+            GTK_SORT_ASCENDING);
     }
-
-    int old_size = 0;
-    if(adj_matrix != NULL) {
-        old_size = adj_matrix->columns;
-    }
-
-    /* Try to create the adjacency matrix */
-    if(adj_matrix != NULL) {
-        matrix_free(adj_matrix);
-    }
-    adj_matrix = matrix_new(size, size, PLUS_INF);
-    if(adj_matrix == NULL) {
-        return false;
-    }
-    for(int i = 0; i < size; i++) {
-        adj_matrix->data[i][i] = 0.0;
-    }
-
-    /* Try to create names array */
-    if(names != NULL) {
-        for(int i = 0; i < old_size; i++) {
-            free(names[i]);
-        }
-        free(names);
-    }
-    names = (char**) malloc(size * sizeof(char*));
-    if(names == NULL) {
-        matrix_free(adj_matrix);
-        return false;
-    }
-    for(int i = 0; i < size; i++) {
-        names[i] = sequence_name(i);
-    }
-
-    /* Create the dynamic types array */
-    int rsize = size + 1;
-    GType* types = (GType*) malloc(3 * rsize * sizeof(GType));
-    if(types == NULL) {
-        matrix_free(adj_matrix);
-        return false;
-    }
-    for(int i = 0; i < rsize; i++) {
-        types[i] = G_TYPE_STRING;
-        types[rsize + i] = G_TYPE_BOOLEAN;     /* Editable */
-        types[2 * rsize + i] = G_TYPE_BOOLEAN; /* Background set */
-    }
-
-    /* Create and fill the new model */
-    GtkListStore* model = gtk_list_store_newv(3 * rsize, types);
-    GtkTreeIter iter;
-
-    GValue init = G_VALUE_INIT;
-    g_value_init(&init, G_TYPE_STRING);
-
-    GValue initb = G_VALUE_INIT;
-    g_value_init(&initb, G_TYPE_BOOLEAN);
-
-    for(int i = 0; i < rsize; i++) {
-        gtk_list_store_append(model, &iter);
-
-        /* First row */
-        if(i == 0) {
-            for(int j = 0; j < rsize; j++) {
-                /* Set value */
-                if(j > 0) {
-                    g_value_set_string(&init, sequence_name(j - 1));
-                    g_value_set_boolean(&initb, true);
-                } else {
-                    g_value_set_string(&init, "");
-                    g_value_set_boolean(&initb, false);
-                }
-                gtk_list_store_set_value(model, &iter, j, &init);
-
-                /* Set editable */
-                gtk_list_store_set_value(model, &iter, rsize + j, &initb);
-
-                /* Set background set */
-                g_value_set_boolean(&initb, true);
-                gtk_list_store_set_value(model, &iter, 2 * rsize + j, &initb);
-            }
-            continue;
-        }
-
-        /* Other rows, first cell */
-        /* Set value */
-        g_value_set_string(&init, sequence_name(i - 1));
-        gtk_list_store_set_value(model, &iter, 0, &init);
-
-        /* Set editable */
-        g_value_set_boolean(&initb, false);
-        gtk_list_store_set_value(model, &iter, rsize, &initb);
-
-        /* Set background set */
-        g_value_set_boolean(&initb, true);
-        gtk_list_store_set_value(model, &iter, 2 * rsize, &initb);
-
-        /* Other rows, other cells */
-        for(int j = 1; j < rsize; j++) {
-
-            /* Set value */
-            if(i == j) {
-                g_value_set_string(&init, "0");
-            } else {
-                g_value_set_string(&init, "oo");
-            }
-            gtk_list_store_set_value(model, &iter, j, &init);
-
-            /* Set editable */
-            g_value_set_boolean(&initb, i != j);
-            gtk_list_store_set_value(model, &iter, rsize + j, &initb);
-
-            /* Set background set */
-            g_value_set_boolean(&initb, false);
-            gtk_list_store_set_value(model, &iter, 2 * rsize + j, &initb);
-        }
-    }
-
-    /* Clear the previous matrix */
-    for(int i = gtk_tree_view_get_n_columns(input) - 1; i >= 0; i--) {
-        gtk_tree_view_remove_column(input,
-                                        gtk_tree_view_get_column(input, i)
-                                    );
-    }
-
-    /* Create the matrix */
-    for(int i = 0; i < rsize; i++) {
-        /* Configure cell */
-        GtkCellRenderer* cell = gtk_cell_renderer_text_new();
-        g_object_set(cell, "cell-background", "Black", NULL);
-        g_signal_connect(G_OBJECT(cell),
-                         "edited", G_CALLBACK(cell_edited_cb),
-                         GINT_TO_POINTER(i));
-        /* Configure column */
-        GtkTreeViewColumn* column = gtk_tree_view_column_new_with_attributes(
-                                        "", cell,  /* Title, renderer */
-                                        "text", i,
-                                        "editable", rsize + i,
-                                        "cell-background-set", 2 * rsize + i,
-                                        NULL);
-        gtk_tree_view_append_column(input, column);
-    }
-    GtkTreeViewColumn* close_column = gtk_tree_view_column_new();
-    gtk_tree_view_append_column(input, close_column);
-
-    /* Set the new model */
-    gtk_tree_view_set_model(input, GTK_TREE_MODEL(model));
-
-    /* Update the graph */
-    update_graph();
-
-    /* Free resources */
-    g_object_unref(G_OBJECT(model));
-    free(types);
-
-    return true;
 }
 
-void update_graph()
+void add_row(GtkToolButton *toolbutton, gpointer user_data)
 {
-    /* Create graph */
-    mwis_graph(adj_matrix, names);
-    if(gv2png("graph", "reports") < 0) {
-        gtk_image_set_from_pixbuf(graph, NULL);
+    int rows = gtk_tree_model_iter_n_children(
+                                    GTK_TREE_MODEL(nodes_model), NULL);
+
+    GtkTreeIter iter;
+    gtk_list_store_append(nodes_model, &iter);
+    gtk_list_store_set(nodes_model, &iter,
+                        0, sequence_name(rows),
+                        1, 0.0010,
+                        2, g_strdup_printf("%.8f", 0.0010),
+                        3, 0.0010,
+                        4, g_strdup_printf("%.8f", 0.0010),
+                        5, 0.0010,
+                        6, g_strdup_printf("%.8f", 0.0010),
+                        7, 0.0010,
+                        8, g_strdup_printf("%.8f", 0.0010),
+                        -1);
+
+    gtk_label_set_text(total_label,
+                       g_strdup_printf("Total: %i nodes.", rows + 1));
+
+    GtkTreePath* model_path = gtk_tree_model_get_path(
+                                GTK_TREE_MODEL(nodes_model), &iter);
+    gtk_tree_view_set_cursor(nodes_view, model_path,
+                             gtk_tree_view_get_column(nodes_view, 0),
+                             true);
+    gtk_tree_path_free(model_path);
+
+    return;
+}
+
+void remove_row(GtkToolButton *toolbutton, gpointer user_data)
+{
+    int rows = gtk_tree_model_iter_n_children(
+                                    GTK_TREE_MODEL(nodes_model), NULL);
+    if(rows < 3) {
         return;
     }
 
-    /* Load image */
-    GError* error = NULL;
-    //GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file_at_size(
-                            //"reports/graph.png", 300, 300, &error);
-    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file("reports/graph.png", &error);
-    if(pixbuf == NULL) {
-        if(error) {
-            g_warning("%s", error->message);
-            g_error_free(error);
-        } else {
-            g_warning("Unknown error while loading the graph.");
+    GtkTreeSelection* selection = gtk_tree_view_get_selection(nodes_view);
+    GtkTreeIter iter;
+    if(gtk_tree_selection_get_selected(selection, NULL, &iter)) {
+
+        bool valid = gtk_list_store_remove(nodes_model, &iter);
+
+        gtk_label_set_text(total_label,
+                       g_strdup_printf("Total: %i nodes.", rows  - 1));
+
+        if(!valid) {
+            valid = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(nodes_model),
+                                                  &iter, NULL, rows - 1);
         }
-        return;
-    }
-    gtk_image_set_from_pixbuf(graph, pixbuf);
 
-    g_object_unref(pixbuf);
+        if(valid) {
+            GtkTreePath* model_path = gtk_tree_model_get_path(
+                                        GTK_TREE_MODEL(nodes_model), &iter);
+            gtk_tree_view_set_cursor(nodes_view, model_path, NULL, false);
+            gtk_tree_path_free(model_path);
+        }
+    }
+}
+
+void edit_started_cb(GtkCellRenderer* renderer, GtkCellEditable* editable,
+                     gchar* path, gpointer user_data)
+{
+    GtkAdjustment* adj;
+
+    g_object_get(renderer, "adjustment", &adj, NULL);
+    if(adj) {
+        g_object_unref(adj);
+    }
+
+    adj = gtk_adjustment_new(
+                    0.001,          /* the initial value. */
+                    0.000,          /* the minimum value. */
+                    1.000,          /* the maximum value. */
+                    0.001,          /* the step increment. */
+                    0.010,          /* the page increment. */
+                    0.000           /* the page size. */
+                );
+    g_object_set(renderer, "adjustment", adj, NULL);
+}
+
+bool is_unique(char* new, int at_row)
+{
+    GtkTreeModel* model = GTK_TREE_MODEL(nodes_model);
+    GtkTreeIter iter;
+    bool valid = gtk_tree_model_get_iter_first(model, &iter);
+
+    int row = 0;
+    bool unique = true;
+    while(valid) {
+        char* name;
+        gtk_tree_model_get(model, &iter, 0, &name, -1);
+
+        if((row != at_row) && (g_strcmp0(new, name) == 0)) {
+            unique = false;
+            break;
+        }
+
+        g_free(name);
+
+        valid = gtk_tree_model_iter_next(model, &iter);
+        row++;
+    }
+
+    return unique;
 }
 
 void cell_edited_cb(GtkCellRendererText* renderer, gchar* path,
@@ -293,129 +265,125 @@ void cell_edited_cb(GtkCellRendererText* renderer, gchar* path,
 {
     int row = atoi(path);
     int column = GPOINTER_TO_INT(user_data);
+    g_strstrip(new_text); /* Strip string in place */
     printf("%s at (%i, %i)\n", new_text, row, column);
 
-    /* Validate row and column just in case */
-    if((row == column) || column == 0) {
+    /* Check if unique */
+    if(!is_unique(new_text, row)) {
+        show_error(window, "Please set a unique name for each node.");
         return;
     }
+
 
     /* Get reference to model */
     GtkTreePath* model_path = gtk_tree_path_new_from_string(path);
     GtkTreeIter iter;
-    gtk_tree_model_get_iter(gtk_tree_view_get_model(input), &iter, model_path);
+    gtk_tree_model_get_iter(GTK_TREE_MODEL(nodes_model), &iter, model_path);
     gtk_tree_path_free(model_path);
 
     GValue value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_STRING);
 
-    /* A node is being renamed */
-    if(row == 0) {
-        if(!is_empty_string(new_text)) {
-            /* Set node at first row */
-            g_value_set_string(&value, new_text);
-            gtk_list_store_set_value(
-                            GTK_LIST_STORE(gtk_tree_view_get_model(input)),
-                            &iter, column, &value);
+    if(column == 0) {
 
-            /* Set node at first column */
-            char* at_y = g_strdup_printf("%i", column);
-            model_path = gtk_tree_path_new_from_string(at_y);
-            gtk_tree_model_get_iter(
-                    gtk_tree_view_get_model(input), &iter, model_path);
-            gtk_tree_path_free(model_path);
-            g_free(at_y);
-            gtk_list_store_set_value(
-                            GTK_LIST_STORE(gtk_tree_view_get_model(input)),
-                            &iter, 0, &value);
-
-            g_free(names[column - 1]);
-            names[column - 1] = g_strdup(new_text);
-
-            /* Update the graph */
-            update_graph();
+        if(is_empty_string(new_text)) {
+            return;
         }
-        return;
+
+        g_value_init(&value, G_TYPE_STRING);
+        g_value_set_string(&value, new_text);
+        gtk_list_store_set_value(nodes_model, &iter, column, &value);
+
+    } else if(!is_empty_string(new_text)) {
+
+        char* end;
+        float v = strtof(new_text, &end);
+        if((end != new_text) && (*end == '\0') && (v > 0.0)) {
+
+            g_value_init(&value, G_TYPE_FLOAT);
+            g_value_set_float(&value, v);
+            gtk_list_store_set_value(nodes_model, &iter, column*2-1, &value);
+
+            g_value_unset(&value);
+
+            g_value_init(&value, G_TYPE_STRING);
+            g_value_set_string(&value, g_strdup_printf("%.8f", v));
+            gtk_list_store_set_value(nodes_model, &iter, column*2, &value);
+        }
     }
-
-    /* A distance is being set */
-    /* INFINITY */
-    int is_inf = strncmp(new_text, "oo", 2);
-    if(is_inf == 0 || is_empty_string(new_text)) {
-        g_value_set_string(&value, "oo");
-        gtk_list_store_set_value(
-                            GTK_LIST_STORE(gtk_tree_view_get_model(input)),
-                            &iter, column, &value);
-
-        adj_matrix->data[row - 1][column - 1] = PLUS_INF;
-
-        /* Update the graph */
-        update_graph();
-        return;
-    }
-    /* Distance */
-    char* end;
-    int distance = (int) strtol(new_text, &end, 10);
-    if((end != new_text) && (*end == '\0') && (distance > 0)) {
-        char* distance_as_string = g_strdup_printf("%i", distance);
-        g_value_set_string(&value, distance_as_string);
-        gtk_list_store_set_value(
-                            GTK_LIST_STORE(gtk_tree_view_get_model(input)),
-                            &iter, column, &value);
-        g_free(distance_as_string);
-
-        adj_matrix->data[row - 1][column - 1] = (float) distance;
-
-        /* Update the graph */
-        update_graph();
-        return;
-    }
-    return;
-
-}
-
-void change_matrix_cb(GtkSpinButton* spinbutton, gpointer user_data)
-{
-    /* Get the number of requested nodes */
-    int value = gtk_spin_button_get_value_as_int(spinbutton);
-    bool success = change_matrix(value);
-    if(!success) {
-        show_error(window, "Unable to allocate enough memory for "
-                           "this problem. Sorry.");
-    }
-    return;
 }
 
 void process(GtkButton* button, gpointer user_data)
 {
-    /* Try to create the new context */
     if(c != NULL) {
         mwis_context_free(c);
     }
-    c = mwis_context_new(adj_matrix->columns);
+
+    int keys = gtk_tree_model_iter_n_children(
+                                    GTK_TREE_MODEL(nodes_model), NULL);
+
+    /* Create context */
+    c = mwis_context_new(keys);
     if(c == NULL) {
         show_error(window, "Unable to allocate enough memory for "
                            "this problem. Sorry.");
         return;
     }
 
-    /* Copy adjacency matrix and names */
-    matrix_copy(adj_matrix, c->table_d);
-    for(int i = 0; i < adj_matrix->columns; i++) {
-        c->names[i] = names[i];
+    /* Fill context */
+    char** names = c->names;
+    float* probs = c->keys_probabilities;
+
+    GtkTreeIter iter;
+    bool was_set = gtk_tree_model_get_iter_first(
+                            GTK_TREE_MODEL(nodes_model), &iter);
+    if(!was_set) {
+        return;
     }
+
+    GValue value = G_VALUE_INIT;
+
+    float total_weights = 0.0;
+    int i = 0;
+    do {
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 0, &value);
+        char* n = g_value_dup_string(&value);
+        g_value_unset(&value);
+
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 1, &value);
+        float v = g_value_get_float(&value);
+        g_value_unset(&value);
+
+        /* Set values */
+        names[i] = n;
+        probs[i] = v;
+
+        was_set = gtk_tree_model_iter_next(
+                            GTK_TREE_MODEL(nodes_model), &iter);
+        total_weights += v;
+        i++;
+    } while(was_set);
+
 
     /* Execute algorithm */
     bool success = mwis(c);
     if(!success) {
-        show_error(window, "Error while processing the information.\n"
+        show_error(window, "Error while processing the information. "
                            "Please check your data.");
     }
+
+    /* Show tables */
+    printf("-----------------------------------\n");
+    matrix_print(c->table_a);
+
+    printf("-----------------------------------\n");
+    matrix_print(c->table_r);
 
     /* Generate report */
     bool report_created = mwis_report(c);
     if(!report_created) {
-        show_error(window, "Report could not be created.\n"
+        show_error(window, "Report could not be created. "
                            "Please check your data.");
     } else {
         printf("Report created at reports/mwis.tex\n");
@@ -424,7 +392,7 @@ void process(GtkButton* button, gpointer user_data)
         if(as_pdf == 0) {
             printf("PDF version available at reports/mwis.pdf\n");
         } else {
-            char* error = g_strdup_printf("Unable to convert report to PDF.\n"
+            char* error = g_strdup_printf("Unable to convert report to PDF. "
                                           "Status: %i.", as_pdf);
             show_error(window, error);
             g_free(error);
@@ -526,27 +494,45 @@ void load_cb(GtkButton* button, gpointer user_data)
 
 void save(FILE* file)
 {
-    /* Number of nodes */
-    int num_nodes = adj_matrix->columns;
-    fprintf(file, "%i\n", num_nodes);
+    fprintf(file, "%i\n", gtk_tree_model_iter_n_children(
+                                    GTK_TREE_MODEL(nodes_model), NULL));
 
-    /* Nodes names */
-    for(int i = 0; i < num_nodes; i++) {
-        fprintf(file, "%s\n", names[i]);
+    GtkTreeIter iter;
+    GValue value = G_VALUE_INIT;
+
+    /* Write node names */
+    bool was_set = gtk_tree_model_get_iter_first(
+                                    GTK_TREE_MODEL(nodes_model), &iter);
+    while(was_set) {
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 0, &value);
+        char* n = g_value_dup_string(&value);
+        g_value_unset(&value);
+
+        fprintf(file, "%s\n", n);
+        g_free(n);
+
+        /* Next */
+        was_set = gtk_tree_model_iter_next(
+                            GTK_TREE_MODEL(nodes_model), &iter);
     }
 
-    /* Adjacency matrix */
-    for(int i = 0; i < adj_matrix->rows; i++) {
-        for(int j = 0; j < adj_matrix->columns; j++) {
-            float d = adj_matrix->data[i][j];
-            if(d == PLUS_INF) {
-                fprintf(file, "oo ");
-            } else {
-                fprintf(file, "%i ", (int)d);
-            }
-        }
-        fprintf(file, "\n");
+    /* Write node names */
+    was_set = gtk_tree_model_get_iter_first(
+                                    GTK_TREE_MODEL(nodes_model), &iter);
+    while(was_set) {
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 1, &value);
+        float v = g_value_get_float(&value);
+        g_value_unset(&value);
+
+        fprintf(file, "%.8f\n", v);
+
+        /* Next */
+        was_set = gtk_tree_model_iter_next(
+                            GTK_TREE_MODEL(nodes_model), &iter);
     }
+
 }
 
 void load(FILE* file)
@@ -556,78 +542,53 @@ void load(FILE* file)
     fscanf(file, "%i%*c", &num_nodes);
 
     /* Adapt GUI */
-    bool success = change_matrix(num_nodes);
-    if(!success) {
-        show_error(window, "Unable to allocate enough memory for "
-                           "this problem. Sorry.");
-        return;
+    enable_sort(false);
+    gtk_list_store_clear(nodes_model);
+    for(int i = 0; i < num_nodes; i++) {
+        add_row(NULL, NULL);
     }
-    gtk_spin_button_set_value(nodes, (gdouble)num_nodes);
 
-    /* Load node names */
-    GtkListStore* model = GTK_LIST_STORE(gtk_tree_view_get_model(input));
+    /* Load nodes names */
+    char** names = (char**) malloc(num_nodes * sizeof(char*));
+    for(int i = 0; i < num_nodes; i++) {
+        names[i] = get_line(file);
+    }
+
+    /* Load nodes data */
     GtkTreeIter iter;
     bool has_row = gtk_tree_model_get_iter_first(
-                            GTK_TREE_MODEL(model), &iter);
-    if(!has_row) {
-        return;
+                            GTK_TREE_MODEL(nodes_model), &iter);
+    float x = 0.0;
+    float y = 0.0;
+    float d = 0.0;
+    float w = 0.0;
+    for(int i = 0; (i < num_nodes) && has_row; i++) {
+
+        /* Get values */
+        fscanf(file, "%f%f%f%f%*c", &x, &y, &d, &w);
+
+        /* Set values */
+        gtk_list_store_set(nodes_model, &iter,
+                    0, names[i],
+                    1, x,
+                    2, g_strdup_printf("%.8f", x),
+                    3, y,
+                    4, g_strdup_printf("%.8f", y),
+                    5, d,
+                    6, g_strdup_printf("%.8f", d),
+                    7, w,
+                    8, g_strdup_printf("%.8f", w),
+                    -1);
+        /* Next */
+        has_row = gtk_tree_model_iter_next(GTK_TREE_MODEL(nodes_model), &iter);
     }
 
-    char* name_i = NULL;
-    GValue name_v = G_VALUE_INIT;
-
+    /* Free resources */
     for(int i = 0; i < num_nodes; i++) {
-        /* Get name */
-        name_i = get_line(file);
-        /* Get create GValue */
-        g_value_init(&name_v, G_TYPE_STRING);
-        g_value_set_string(&name_v, name_i);
-        /* Store */
-        gtk_list_store_set_value(model, &iter, i + 1, &name_v);
-        names[i] = g_strdup(name_i);
-        /* Free resources */
-        g_value_unset(&name_v);
-        free(name_i);
+        free(names[i]);
     }
+    free(names);
 
-    /* Load adjacency matrix */
-    gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
-
-    char cell_i[12];
-    GValue cell_v = G_VALUE_INIT;
-
-    for(int i = 0; i < num_nodes; i++) {
-        for(int j = 0; j < num_nodes; j++) {
-            /* Get string */
-            fscanf(file, "%s", cell_i);
-
-            /* Set the cell */
-            if(i != j) {
-                g_value_init(&cell_v, G_TYPE_STRING);
-
-                /* Check if INFINITY */
-                if(strncmp((char*) &cell_i, "oo", 2) == 0) {
-                    adj_matrix->data[i][j] = PLUS_INF;
-                    g_value_set_string(&cell_v, "oo");
-                } else {
-                    int cell = atoi((char*) &cell_i);
-                    adj_matrix->data[i][j] = cell;
-                    g_value_set_string(&cell_v, (char*) &cell_i);
-                }
-
-                /* Set value in GUI */
-                gtk_list_store_set_value(model, &iter, j + 1, &cell_v);
-                g_value_unset(&cell_v);
-
-                /* Load name */
-                g_value_init(&cell_v, G_TYPE_STRING);
-                g_value_set_string(&cell_v, names[i]);
-                gtk_list_store_set_value(model, &iter, 0, &cell_v);
-                g_value_unset(&cell_v);
-            }
-        }
-        gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
-    }
-
-    update_graph();
+    /* Reorder nodes */
+    enable_sort(true);
 }

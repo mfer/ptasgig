@@ -1,5 +1,6 @@
 /*
- * Copyleft ()) 2014 Manassés Ferreira Neto <sudolshw@gmail.com>
+ * Copyright (C) 2012 Carolina Aguilar <caroagse@gmail.com>
+ * Copyright (C) 2012 Carlos Jenkins <carlos@jenkins.co.cr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,59 +18,70 @@
 
 #include "mwis.h"
 
-mwis_context* mwis_context_new(int nodes)
+mwis_context* mwis_context_new(int keys)
 {
     /* Check input is correct */
-    if(nodes < 2) {
+    if(keys < 1) {
         return NULL;
     }
 
-    /* Allocate structure */
+    /* Allocate structures */
     mwis_context* c = (mwis_context*) malloc(sizeof(mwis_context));
     if(c == NULL) {
         return NULL;
     }
 
-    /* Try to allocate matrices */
-    c->table_d = matrix_new(nodes, nodes, PLUS_INF);
-    if(c->table_d == NULL) {
-        free(c);
-        return NULL;
-    }
-    c->table_p = matrix_new(nodes, nodes, 0.0);
-    if(c->table_p == NULL) {
-        matrix_free(c->table_d);
-        free(c);
+    /* Try to allocate keys' probabilities */
+    c->keys_probabilities = (float*) malloc(keys * sizeof(float));
+    if(c->keys_probabilities == NULL) {
         return NULL;
     }
 
-    /* Try to allocate items array */
-    c->names = (char**) malloc(nodes * sizeof(char*));
+    /* Try to allocate matrices */
+    int size = keys + 1;
+    c->table_a = matrix_new(size, size, PLUS_INF);
+    if(c->table_a == NULL) {
+        free(c->keys_probabilities);
+        return NULL;
+    }
+    c->table_r = matrix_new(size, size, 0.0);
+    if(c->table_r == NULL) {
+        free(c->keys_probabilities);
+        matrix_free(c->table_a);
+        return NULL;
+    }
+
+    /* Try to allocate names array */
+    c->names = (char**) malloc(keys * sizeof(char*));
     if(c->names == NULL) {
-        matrix_free(c->table_d);
-        matrix_free(c->table_p);
+        matrix_free(c->table_a);
+        matrix_free(c->table_r);
+        free(c->keys_probabilities);
         free(c);
         return NULL;
     }
+    c->keys = keys;
 
     /* Initialize values */
-    for(int i = 0; i < nodes; i++) {
-        c->table_d->data[i][i] = 0.0;
+    for(int i = 0; i < size; i++) {
+        c->table_a->data[i][i] = 0.0;
+    }
+    for(int i = 0; i < keys; i++) {
         c->names[i] = "";
     }
 
-    c->nodes = nodes;
-
     c->status = -1;
-    c->execution_time = 0.0;
-    c->memory_required = (matrix_sizeof(c->table_d) * 2) +
-                         (nodes * sizeof(char*)) +
+    c->execution_time = 0;
+    c->memory_required = matrix_sizeof(c->table_a) +
+                         matrix_sizeof(c->table_r) +
+                         (keys * sizeof(float)) +
+                         (keys * sizeof(char*)) +
                          sizeof(mwis_context);
     c->report_buffer = tmpfile();
     if(c->report_buffer == NULL) {
-        matrix_free(c->table_d);
-        matrix_free(c->table_p);
-        free(c->names);
+        matrix_free(c->table_a);
+        matrix_free(c->table_r);
+        free(c->keys_probabilities);
         free(c);
         return NULL;
     }
@@ -79,9 +91,10 @@ mwis_context* mwis_context_new(int nodes)
 
 void mwis_context_free(mwis_context* c)
 {
-    matrix_free(c->table_d);
-    matrix_free(c->table_p);
+    matrix_free(c->table_a);
+    matrix_free(c->table_r);
     fclose(c->report_buffer);
+    free(c->keys_probabilities);
     free(c->names);
     free(c);
     return;
@@ -89,49 +102,40 @@ void mwis_context_free(mwis_context* c)
 
 bool mwis(mwis_context *c)
 {
-    /* Create graph and first iteration */
-    mwis_graph(c->table_d, c->names);
-    mwis_execution(c, 0);
-
     /* Start counting time */
     GTimer* timer = g_timer_new();
 
-    /* Run the MWIS PTAS */
-    matrix* d = c->table_d;
-    matrix* p = c->table_p;
-    int nodes = d->rows;
+    /* Setting probabilities values */
+    for(int i = 0; i < c->keys; i++) {
+        c->table_a->data[i][i + 1] = c->keys_probabilities[i];
+    }
+    /* Setting winning k for given probabilities in R */
+    for(int i = 0; i < c->keys; i++) {
+        c->table_r->data[i][i + 1] = i + 1;
+    }
 
+    /* Run the probabilities to win algorithm */
 
-    /* First we need to do the
-      FIG 2.4 Computing the auxiliary table AT_S,I (S_g,h, ∗). 
-      http://goo.gl/XvNkg4
-    */
+    /* c->keys-1=Numbers of diagonals to fill */
+    for(int j = 1; j <= c->keys - 1; j++) {
+        for(int i = 1; i <= c->keys - j; i++) {
+            for(int k = i;  k <= i + j; k++) {
+                float p = 0.0;
 
-    int k = 5;
-    double d_min = 0.001; 
-    int l = (int)(log(1/d_min)/log(k+1));
-    printf("%d\n",l);
+                /* Calculate the probability */
+                for(int l = i; l <= i + j; l++) {
+                    p += c->keys_probabilities[l - 1];
+                }
+                float t = c->table_a->data[i - 1][k - 1] +
+                          c->table_a->data[k][i + j] + p;
 
-
-
-    /* And then, we do
-      FIG 2.7 Computing the auxiliary table AT_S,I (S_g1··g3,h1··h2, ∗).
-      http://goo.gl/hmi9tI
-    */
-
-    for(int k = 0; k < nodes; k++) {
-        for(int i = 0; i < nodes; i++) {
-            for(int j = 0; j < nodes; j++) {
-                float minimum = fminf(d->data[i][j],
-                                      d->data[i][k] + d->data[k][j]);
-                if(minimum < d->data[i][j]) {
-                    p->data[i][j] = k + 1;
-                    d->data[i][j] = minimum;
+                /* Compare to get the minimun value */
+                if(t < c->table_a->data[i - 1][i + j]) {
+                    c->table_a->data[i - 1][i + j] = t;
+                    c->table_r->data[i - 1][i + j] = k;
                 }
             }
         }
-        /* Log execution */
-        mwis_execution(c, k + 1);
     }
 
     /* Stop counting time */

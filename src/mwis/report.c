@@ -34,10 +34,10 @@ bool mwis_report(mwis_context* c)
     fprintf(report, "\n");
 
     /* Write header */
-    fprintf(report, "\\section{%s}\n\n", "MWIS PTAS");
+    fprintf(report, "\\section{%s}\n\n", "Optimal Binary Search Trees");
     fprintf(report, "\\noindent{\\huge %s.} \\\\[0.4cm]\n",
-                    "Polynomial-Time Approximation Schemes for Geometric Intersection Graphs");
-    fprintf(report, "{\\LARGE %s.}\\\\[0.4cm]\n", "SIAM Journal on Computing Volume 34 Issue 6, 2005 Pages 1302 - 1323");
+                    "Dynamic programming");
+    fprintf(report, "{\\LARGE %s.}\\\\[0.4cm]\n", "Operation Research");
     fprintf(report, "\\HRule \\\\[0.5cm]\n");
 
     /* Write description */
@@ -61,19 +61,10 @@ bool mwis_report(mwis_context* c)
     fprintf(report, "\\end{compactitem}\n");
     fprintf(report, "\n");
 
-    /* Write graph */
-    fprintf(report, "\\subsection{%s}\n", "Input graph");
-    gv2pdf("graph", "reports");
-    if(file_exists("reports/graph.pdf")) {
-        fprintf(report, "\\begin{figure}[H]\\centering\n");
-        fprintf(report, "\\noindent\\includegraphics[height=210px]"
-                        "{reports/graph.pdf}\n");
-        fprintf(report, "\\caption{%s.}\n\\end{figure}\n",
-                        "MWIS's input directed graph system");
-    } else {
-        fprintf(report, "ERROR: Graph image could not be generated.\n");
-    }
-    fprintf(report, "\n");
+    /* Write nodes */
+    fprintf(report, "\\subsection{%s}\n", "Nodes");
+    mwis_nodes(c, report);
+    fprintf(report, "\\newpage\n");
 
     /* TOC */
     fprintf(report, "\\newpage\n\\tableofcontents\n\\newpage\n");
@@ -81,118 +72,31 @@ bool mwis_report(mwis_context* c)
 
     /* Write execution */
     fprintf(report, "\\subsection{%s}\n", "Execution");
-    success = copy_streams(c->report_buffer, report);
-    if(!success) {
-        return false;
-    }
+    mwis_execution(c, report);
     fprintf(report, "\n");
 
-    /* Write analisis */
-    int bumpier = -1;
-    int startb, endb;
-
-    float heavier = -1.0;
-    int starth, endh;
-
+    /* Write graphic */
+    int levels = mwis_graph(c);
     fprintf(report, "\\subsection{%s}\n", "Analisis");
-    int counter = 0;
-    for(int starti = 0; starti < c->nodes; starti++) {
-        for(int endi = 0; endi < c->nodes; endi++) {
-
-            /* Ignore same node paths */
-            if(starti == endi) {
-                continue;
-            }
-
-            counter++;
-            if(counter % 6 == 0) {
-                fprintf(report, "\\clearpage\n");
-            }
-
-            /* Preamble */
-            fprintf(report, "\\subsubsection{%s: %s $\\longrightarrow$ %s}\n",
-                            "Analisis for path",
-                            c->names[starti], c->names[endi]);
-            fprintf(report, "\\begin{compactitem}\n");
-            fprintf(report, "\\item %s : {\\Large %s \\subscript{(%i)}}"
-                            "$\\longrightarrow$ ", "Optimal path",
-                            c->names[starti], starti + 1);
-
-            /* Follow route */
-            int jumps = 1;
-            int next = (int)c->table_p->data[starti][endi];
-            while(next != 0) {
-                fprintf(report, "%s \\subscript{(%i)} $\\longrightarrow$ ",
-                                c->names[next - 1], next);
-                next = (int)c->table_p->data[next - 1][endi];
-                jumps++;
-            }
-
-            /* Write subreport */
-            fprintf(report, "%s \\subscript{(%i)}.\n",
-                            c->names[endi], endi + 1);
-            fprintf(report, "\\item %s : {\\Large %i}.\n",
-                            "Total jumps", jumps);
-            float distance = c->table_d->data[starti][endi];
-            if(distance == FLT_MAX) {
-                fprintf(report, "\\item %s : {\\Large $\\infty$}.\n",
-                                "Total distance");
-            } else {
-                if(floorf(distance) == distance) {
-                    fprintf(report, "\\item %s : {\\Large %.0f}.\n",
-                                    "Total distance", distance);
-                } else {
-                    fprintf(report, "\\item %s : {\\Large %.4f}.\n",
-                                    "Total distance", distance);
-                }
-            }
-            fprintf(report, "\\end{compactitem}\n");
-            fprintf(report, "\n");
-
-            /* Compare this iteration */
-            if(jumps > bumpier) {
-                bumpier = jumps;
-                startb = starti;
-                endb = endi;
-            }
-            if(distance > heavier) {
-                heavier = distance;
-                starth = starti;
-                endh = endi;
-            }
-        }
+    if(file_exists("reports/tree.pdf")) {
+        fprintf(report, "\\begin{figure}[H]\\centering\n");
+        fprintf(report, "\\noindent\\includegraphics"
+                        "[height=500px, width=400px, keepaspectratio]"
+                        "{reports/tree.pdf}\n");
+        fprintf(report, "\\caption{%s.}\n\\end{figure}\n",
+                        "Optimal search tree");
+    } else {
+        fprintf(report, "ERROR: Tree image could not be generated.\n");
     }
+    fprintf(report, "\\newpage\n\n");
 
     /* Digest */
     fprintf(report, "\\subsection{%s}\n", "Digest");
     fprintf(report, "\\begin{compactitem}\n");
-    if(bumpier != -1) {
-        fprintf(report, "\\item %s : {\\Large %s \\subscript{(%i)} "
-                        "$\\longrightarrow$ %s \\subscript{(%i)}} "
-                        "with %i jumps.\n",
-                        "Bumpier path",
-                        c->names[startb], startb + 1,
-                        c->names[endb], endb + 1,
-                        bumpier);
-    }
-    if(heavier != -1.0) {
-        char* template = "\\item %s : {\\Large %s \\subscript{(%i)} "
-                         "$\\longrightarrow$ %s \\subscript{(%i)}} with a "
-                         "total distance of {\\Large %.4f}.\n";
-        if(floorf(heavier) == heavier) {
-            template = "\\item %s : {\\Large %s \\subscript{(%i)} "
-                       "$\\longrightarrow$ %s \\subscript{(%i)}} with a "
-                       "total distance of {\\Large %.0f}.\n";
-        } else if(heavier == PLUS_INF) {
-            template = "\\item %s : {\\Large %s \\subscript{(%i)} "
-                       "$\\longrightarrow$ %s \\subscript{(%i)}} with a "
-                       "total distance of {\\Large $\\infty$}.\n";
-        }
-        fprintf(report, template, "Longest path",
-                        c->names[starth], starth + 1,
-                        c->names[endh], endh + 1,
-                        heavier);
-    }
+    fprintf(report, "\\item %s : {\\Large %i}.\n", "Total nodes", c->keys);
+    fprintf(report, "\\item %s : {\\Large %i}.\n", "Levels", levels);
+    fprintf(report, "\\item %s : {\\Large %.2f}.\n", "Expected cost",
+                    c->table_a->data[0][c->keys]);
     fprintf(report, "\\end{compactitem}\n");
     fprintf(report, "\n");
 
@@ -214,16 +118,128 @@ bool mwis_report(mwis_context* c)
     return true;
 }
 
-void mwis_execution(mwis_context* c, int k)
+int find_nodes(matrix* r, int i, int j, FILE* stream)
 {
-    FILE* stream = c->report_buffer;
-    fprintf(stream, "\\subsubsection{%s %i}\n", "Iteration", k);
-    mwis_table(c->table_d, true, k, stream);
-    mwis_table(c->table_p, false, k, stream);
-    fprintf(stream, "\\clearpage\n");
+    int levels = max(find_rnodes(r, i, j, stream, 1),
+                     find_lnodes(r, i, j, stream, 1));
+    return levels;
 }
 
-void mwis_table(matrix* m, bool d, int k, FILE* stream)
+int find_lnodes(matrix* r, int i, int j, FILE* stream, int level)
+{
+    /* printf("Finding left nodes at (%i, %i).\n", i, j); */
+
+    /* Current node, search node */
+    int cn = (int)r->data[i][j];
+    j = cn - 1;
+    int sn = (int)r->data[i][j];
+
+    /* No childs */
+    if(sn == 0) {
+        /* printf("None found.\n"); */
+        return level;
+    }
+
+    /* Write node found and continue */
+    fprintf(stream, "    %i -> %i;\n", cn, sn);
+    return max(find_rnodes(r, i, j, stream, level + 1),
+               find_lnodes(r, i, j, stream, level + 1));
+}
+
+int find_rnodes(matrix* r, int i, int j, FILE* stream, int level)
+{
+    /* printf("Finding right nodes at (%i, %i).\n", i, j); */
+
+    /* Current node, search node */
+    int cn = (int)r->data[i][j];
+    i = cn;
+    int sn = (int)r->data[i][j];
+
+    /* No childs */
+    if(sn == 0) {
+        /* printf("None found.\n"); */
+        return level;
+    }
+
+    /* Write node found and continue */
+    fprintf(stream, "    %i -> %i;\n", cn, sn);
+    return max(find_rnodes(r, i, j, stream, level + 1),
+               find_lnodes(r, i, j, stream, level + 1));
+}
+
+int mwis_graph(mwis_context* c)
+{
+    /* Create tree file */
+    FILE* tree = fopen("reports/tree.gv", "w");
+    if(tree == NULL) {
+        return -1;
+    }
+
+    /* Preamble */
+    fprintf(tree, "digraph bstree {\n\n");
+    fprintf(tree, "    node [shape = circle];\n");
+    fprintf(tree, "    graph [ordering=\"out\"];\n\n");
+
+    /* Labels */
+    for(int i = 0; i < c->keys; i++) {
+        char* name = c->names[i];
+        fprintf(tree, "    %i [label = \"%s\"];\n", i + 1, name);
+    }
+    fprintf(tree, "\n");
+
+    /* Vertices */
+    int i = 0;
+    int j = c->table_r->columns - 1;
+    int levels = find_nodes(c->table_r, i, j, tree);
+    fprintf(tree, "\n");
+    fprintf(tree, "}\n");
+
+    /* Close file */
+    fclose(tree);
+
+    /* Render graph */
+    gv2pdf("tree", "reports");
+
+    return levels;
+}
+
+void mwis_nodes(mwis_context* c, FILE* stream)
+{
+    /* Id Name Probabilities */
+
+    /* Table preamble */
+    fprintf(stream, "\\begin{table}[!ht]\n");
+    fprintf(stream, "\\centering\n");
+    fprintf(stream, "\\begin{tabular}{c||c|c|}\n");
+    fprintf(stream, "\\cline{2-3}\n");
+
+    /* Table headers */
+    fprintf(stream, " & \\cellcolor{gray90}\\textbf{%s}"
+                    " & \\cellcolor{gray90}\\textbf{%s} ",
+                    "Name", "Probabilities");
+    fprintf(stream, " \\\\\n\\hline\\hline\n");
+
+    /* Table body */
+    for(int i = 0; i < c->keys; i++) {
+        fprintf(stream, "\\multicolumn{1}{|c||}"
+                        "{\\cellcolor{gray90}\\textbf{%i}} & ", i + 1);
+        fprintf(stream, "%s & %.2f \\\\ \\hline\n",
+                        c->names[i], c->keys_probabilities[i]);
+    }
+    fprintf(stream, "\\end{tabular}\n");
+
+    /* Caption */
+    fprintf(stream, "\\caption{%s.}\n", "Nodes probabilities");
+    fprintf(stream, "\\end{table}\n");
+    fprintf(stream, "\n");
+}
+
+void mwis_execution(mwis_context* c, FILE* stream) {
+    mwis_table(c->table_a, true, stream);
+    mwis_table(c->table_r, false, stream);
+}
+
+void mwis_table(matrix* m, bool a, FILE* stream)
 {
     /* Table preamble */
     fprintf(stream, "\\begin{table}[!ht]\n");
@@ -248,14 +264,12 @@ void mwis_table(matrix* m, bool d, int k, FILE* stream)
     /* Table body */
     for(int i = 0; i < m->rows; i++) {
         fprintf(stream, "\\multicolumn{1}{|c||}"
-                        "{\\cellcolor{gray90}\\textbf{%i}} & ", i + 1);
+                        "{\\cellcolor{gray90}\\textbf{%i}} & ", i);
         for(int j = 0; j < m->columns; j++) {
 
             float cell = m->data[i][j];
-            if(cell == FLT_MAX) {
-                fprintf(stream, "$\\infty$");
-            } else {
-                if(d && !(ceilf(cell) == cell)) {
+            if(i <= j) {
+                if(a) {
                     fprintf(stream, "%.2f", cell);
                 } else {
                     fprintf(stream, "%.0f", cell);
@@ -268,57 +282,15 @@ void mwis_table(matrix* m, bool d, int k, FILE* stream)
         }
         fprintf(stream, " \\\\ \\hline\n");
     }
-
     fprintf(stream, "\\end{tabular}\n");
-    if(d) {
-        fprintf(stream, "\\caption{%s %i.}\n", "D table at iteration", k);
+
+    /* Caption */
+    if(a) {
+        fprintf(stream, "\\caption{%s.}\n", "Table A");
     } else {
-        fprintf(stream, "\\caption{%s %i.}\n", "P table at iteration", k);
+        fprintf(stream, "\\caption{%s.}\n", "Table R");
     }
     fprintf(stream, "\\end{adjustwidth}\n");
     fprintf(stream, "\\end{table}\n");
     fprintf(stream, "\n");
-}
-
-void mwis_graph(matrix* m, char** n)
-{
-    /* Create graph file */
-    FILE* graph = fopen("reports/graph.gv", "w");
-    if(graph == NULL) {
-        return;
-    }
-
-    /* Preamble */
-    fprintf(graph, "digraph mwis {\n\n");
-    fprintf(graph, "    rankdir = LR;\n");
-    fprintf(graph, "    node [shape = circle];\n\n");
-
-    /* Labels */
-    for(int i = 0; i < m->rows; i++) {
-        char* name = n[i];
-        fprintf(graph, "    %i [label = \"%s\"];\n", i + 1, name);
-    }
-    fprintf(graph, "\n");
-
-    /* Vertices */
-    for(int i = 0; i < m->rows; i++) {
-        for(int j = 0; j < m->columns; j++) {
-            float weight = m->data[i][j];
-            if((weight != PLUS_INF) && (weight != 0.0)) {
-                if(ceilf(weight) == weight) {
-                    fprintf(graph, "    %i -> %i [label = \"%.0f\"];\n",
-                            i + 1, j + 1, weight);
-                } else {
-                    fprintf(graph, "    %i -> %i [label = \"%.2f\"];\n",
-                            i + 1, j + 1, weight);
-                }
-            }
-        }
-        fprintf(graph, "\n");
-    }
-
-    fprintf(graph, "}\n");
-
-    /* Close file */
-    fclose(graph);
 }

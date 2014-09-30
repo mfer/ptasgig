@@ -50,10 +50,10 @@
 
 \HRule
 
-\section{MWIS PTAS}
+\section{Optimal Binary Search Trees}
 
-\noindent{\huge Polynomial-Time Approximation Schemes for Geometric Intersection Graphs.} \\[0.4cm]
-{\LARGE SIAM Journal on Computing Volume 34 Issue 6, 2005 Pages 1302 - 1323.}\\[0.4cm]
+\noindent{\huge Dynamic programming.} \\[0.4cm]
+{\LARGE Operation Research.}\\[0.4cm]
 \HRule \\[0.5cm]
 \indent The goal of the maximum weight independent set problem (MWIS) is to compute, for a given set of geometric objects with certain weights, a subset of disjoint (non-overlapping) objects with maximum total weight.
 
@@ -62,132 +62,94 @@ The running-time for achieving approximation ratio $1+\epsilon$
 is $n^{O(1/\epsilon^{2})}$ for a disk graph with n disks.\\[0.5cm]
 \noindent{\Large Details:}
 \begin{compactitem}
-\item Executed on : \textsc{26/09/2014 05:00}. 
-\item Execution time : \textsc{0,000079 seconds}. 
-\item Memory required : \textsc{144 bytes}. 
+\item Executed on : \textsc{29/09/2014 09:26}. 
+\item Execution time : \textsc{0,000014 seconds}. 
+\item Memory required : \textsc{1140 bytes}. 
 \end{compactitem}
 
-\subsection{Input graph}
-\begin{figure}[H]\centering
-\noindent\includegraphics[height=210px]{reports/graph.pdf}
-\caption{MWIS's input directed graph system.}
-\end{figure}
+\subsection{Nodes}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{c||c|c|}
+\cline{2-3}
+ & \cellcolor{gray90}\textbf{Name} & \cellcolor{gray90}\textbf{Probabilities}  \\
+\hline\hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} & 20 & 5,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} & 25 & 4,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{3}} & 32 & 3,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{4}} & 44 & 2,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{5}} & 48 & 1,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{6}} & 78 & 6,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{7}} & 83 & 7,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{8}} & 88 & 8,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{9}} & root & 100,00 \\ \hline
+\end{tabular}
+\caption{Nodes probabilities.}
+\end{table}
 
+\newpage
 \newpage
 \tableofcontents
 \newpage
 
 \subsection{Execution}
-\subsubsection{Iteration 0}
 \begin{table}[!ht]
 \begin{adjustwidth}{-3cm}{-3cm}
 \centering
-\begin{tabular}{c||c|c|}
-\cline{2-3}
- & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} \\
+\begin{tabular}{c||c|c|c|c|c|c|c|c|c|c|}
+\cline{2-11}
+ & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} & \cellcolor{gray90}\textbf{3} & \cellcolor{gray90}\textbf{4} & \cellcolor{gray90}\textbf{5} & \cellcolor{gray90}\textbf{6} & \cellcolor{gray90}\textbf{7} & \cellcolor{gray90}\textbf{8} & \cellcolor{gray90}\textbf{9} & \cellcolor{gray90}\textbf{10} \\
 \hline\hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} & 0 & $\infty$ \\ \hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} & $\infty$ & 0 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{0}} & 0,00 & 5,00 & 13,00 & 20,00 & 26,00 & 30,00 & 47,00 & 65,00 & 88,00 & 224,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} &  & 0,00 & 4,00 & 10,00 & 15,00 & 18,00 & 33,00 & 48,00 & 71,00 & 202,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} &  &  & 0,00 & 3,00 & 7,00 & 10,00 & 22,00 & 36,00 & 57,00 & 184,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{3}} &  &  &  & 0,00 & 2,00 & 4,00 & 13,00 & 27,00 & 45,00 & 169,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{4}} &  &  &  &  & 0,00 & 1,00 & 8,00 & 22,00 & 38,00 & 160,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{5}} &  &  &  &  &  & 0,00 & 6,00 & 19,00 & 35,00 & 156,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{6}} &  &  &  &  &  &  & 0,00 & 7,00 & 22,00 & 137,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{7}} &  &  &  &  &  &  &  & 0,00 & 8,00 & 116,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{8}} &  &  &  &  &  &  &  &  & 0,00 & 100,00 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{9}} &  &  &  &  &  &  &  &  &  & 0,00 \\ \hline
 \end{tabular}
-\caption{D table at iteration 0.}
+\caption{Table A.}
 \end{adjustwidth}
 \end{table}
 
 \begin{table}[!ht]
 \begin{adjustwidth}{-3cm}{-3cm}
 \centering
-\begin{tabular}{c||c|c|}
-\cline{2-3}
- & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} \\
+\begin{tabular}{c||c|c|c|c|c|c|c|c|c|c|}
+\cline{2-11}
+ & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} & \cellcolor{gray90}\textbf{3} & \cellcolor{gray90}\textbf{4} & \cellcolor{gray90}\textbf{5} & \cellcolor{gray90}\textbf{6} & \cellcolor{gray90}\textbf{7} & \cellcolor{gray90}\textbf{8} & \cellcolor{gray90}\textbf{9} & \cellcolor{gray90}\textbf{10} \\
 \hline\hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} & 0 & 0 \\ \hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} & 0 & 0 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{0}} & 0 & 1 & 1 & 2 & 2 & 2 & 3 & 6 & 6 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} &  & 0 & 2 & 2 & 3 & 3 & 3 & 6 & 6 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} &  &  & 0 & 3 & 3 & 3 & 6 & 6 & 7 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{3}} &  &  &  & 0 & 4 & 4 & 6 & 6 & 7 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{4}} &  &  &  &  & 0 & 5 & 6 & 6 & 7 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{5}} &  &  &  &  &  & 0 & 6 & 7 & 7 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{6}} &  &  &  &  &  &  & 0 & 7 & 8 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{7}} &  &  &  &  &  &  &  & 0 & 8 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{8}} &  &  &  &  &  &  &  &  & 0 & 9 \\ \hline
+\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{9}} &  &  &  &  &  &  &  &  &  & 0 \\ \hline
 \end{tabular}
-\caption{P table at iteration 0.}
+\caption{Table R.}
 \end{adjustwidth}
 \end{table}
 
-\clearpage
-\subsubsection{Iteration 1}
-\begin{table}[!ht]
-\begin{adjustwidth}{-3cm}{-3cm}
-\centering
-\begin{tabular}{c||c|c|}
-\cline{2-3}
- & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} \\
-\hline\hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} & 0 & $\infty$ \\ \hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} & $\infty$ & 0 \\ \hline
-\end{tabular}
-\caption{D table at iteration 1.}
-\end{adjustwidth}
-\end{table}
-
-\begin{table}[!ht]
-\begin{adjustwidth}{-3cm}{-3cm}
-\centering
-\begin{tabular}{c||c|c|}
-\cline{2-3}
- & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} \\
-\hline\hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} & 0 & 0 \\ \hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} & 0 & 0 \\ \hline
-\end{tabular}
-\caption{P table at iteration 1.}
-\end{adjustwidth}
-\end{table}
-
-\clearpage
-\subsubsection{Iteration 2}
-\begin{table}[!ht]
-\begin{adjustwidth}{-3cm}{-3cm}
-\centering
-\begin{tabular}{c||c|c|}
-\cline{2-3}
- & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} \\
-\hline\hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} & 0 & $\infty$ \\ \hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} & $\infty$ & 0 \\ \hline
-\end{tabular}
-\caption{D table at iteration 2.}
-\end{adjustwidth}
-\end{table}
-
-\begin{table}[!ht]
-\begin{adjustwidth}{-3cm}{-3cm}
-\centering
-\begin{tabular}{c||c|c|}
-\cline{2-3}
- & \cellcolor{gray90}\textbf{1} & \cellcolor{gray90}\textbf{2} \\
-\hline\hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{1}} & 0 & 0 \\ \hline
-\multicolumn{1}{|c||}{\cellcolor{gray90}\textbf{2}} & 0 & 0 \\ \hline
-\end{tabular}
-\caption{P table at iteration 2.}
-\end{adjustwidth}
-\end{table}
-
-\clearpage
 
 \subsection{Analisis}
-\subsubsection{Analisis for path: A0 $\longrightarrow$ B0}
-\begin{compactitem}
-\item Optimal path : {\Large A0 \subscript{(1)}}$\longrightarrow$ B0 \subscript{(2)}.
-\item Total jumps : {\Large 1}.
-\item Total distance : {\Large $\infty$}.
-\end{compactitem}
-
-\subsubsection{Analisis for path: B0 $\longrightarrow$ A0}
-\begin{compactitem}
-\item Optimal path : {\Large B0 \subscript{(2)}}$\longrightarrow$ A0 \subscript{(1)}.
-\item Total jumps : {\Large 1}.
-\item Total distance : {\Large $\infty$}.
-\end{compactitem}
+\begin{figure}[H]\centering
+\noindent\includegraphics[height=500px, width=400px, keepaspectratio]{reports/tree.pdf}
+\caption{Optimal search tree.}
+\end{figure}
+\newpage
 
 \subsection{Digest}
 \begin{compactitem}
-\item Bumpier path : {\Large A0 \subscript{(1)} $\longrightarrow$ B0 \subscript{(2)}} with 1 jumps.
-\item Longest path : {\Large A0 \subscript{(1)} $\longrightarrow$ B0 \subscript{(2)}} with a total distance of {\Large 340282346638528859811704183484516925440}.
+\item Total nodes : {\Large 9}.
+\item Levels : {\Large 6}.
+\item Expected cost : {\Large 224,00}.
 \end{compactitem}
 
 \end{document}
