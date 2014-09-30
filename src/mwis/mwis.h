@@ -44,6 +44,9 @@ typedef struct{
     /* Probabilities */
     float* keys_probabilities;
 
+    /* Diameters */
+    float* keys_diameters;
+
 } mwis_context;
 
 mwis_context* mwis_context_new(int keys);

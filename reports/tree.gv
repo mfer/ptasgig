@@ -13,7 +13,6 @@ digraph bstree {
     8 [label = "88"];
     9 [label = "root"];
 
-    9 -> 6;
     6 -> 2;
     2 -> 1;
     2 -> 3;
@@ -21,5 +20,6 @@ digraph bstree {
     4 -> 5;
     6 -> 8;
     8 -> 7;
+    8 -> 9;
 
 }

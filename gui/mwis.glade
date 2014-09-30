@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="k_adjustment">
+    <property name="lower">1</property>
+    <property name="upper">1000000</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkListStore" id="nodes_model">
     <columns>
-      <!-- column-name name -->
+      <!-- column-name name 0-->
       <column type="gchararray"/>
-      <!-- column-name x -->
+      <!-- column-name x 1-->
       <column type="gfloat"/>
-      <!-- column-name x_text -->
+      <!-- column-name x_text 2-->
       <column type="gchararray"/>
-      <!-- column-name y -->
+      <!-- column-name y 3-->
       <column type="gfloat"/>
-      <!-- column-name y_text -->
+      <!-- column-name y_text 4-->
       <column type="gchararray"/>
-      <!-- column-name diameter -->
+      <!-- column-name diameter 5-->
       <column type="gfloat"/>
-      <!-- column-name diameter_text -->
+      <!-- column-name diameter_text 6-->
       <column type="gchararray"/>
-      <!-- column-name weight -->
+      <!-- column-name weight 7-->
       <column type="gfloat"/>
-      <!-- column-name weight_text -->
+      <!-- column-name weight_text 8-->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -187,7 +194,7 @@
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
     <property name="border_width">10</property>
-    <property name="title" translatable="yes">Optimal binary search trees</property>
+    <property name="title" translatable="yes">MWIS</property>
     <property name="window_position">center-always</property>
     <property name="default_width">500</property>
     <property name="default_height">600</property>
@@ -202,7 +209,7 @@
           <object class="GtkBox" id="header">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
+            <child>              
               <object class="GtkLabel" id="nodes_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -223,7 +230,7 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
-          </packing>
+          </packing>    
         </child>
         <child>
           <object class="GtkScrolledWindow" id="nodes_scroll">
@@ -395,6 +402,53 @@
                 <property name="position">1</property>
               </packing>
             </child>
+
+        <child>
+          <object class="GtkGrid" id="k_grid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <child>
+              <object class="GtkLabel" id="capacity_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">30</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">k:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="k">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="margin_right">30</property>
+                <property name="hexpand">True</property>
+                <property name="invisible_char">•</property>
+                <property name="adjustment">k_adjustment</property>
+                <property name="numeric">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+
           </object>
           <packing>
             <property name="expand">False</property>

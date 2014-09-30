@@ -37,16 +37,24 @@ mwis_context* mwis_context_new(int keys)
         return NULL;
     }
 
+    /* Try to allocate keys' diameters */
+    c->keys_diameters = (float*) malloc(keys * sizeof(float));
+    if(c->keys_diameters == NULL) {
+        return NULL;
+    }
+
     /* Try to allocate matrices */
     int size = keys + 1;
     c->table_a = matrix_new(size, size, PLUS_INF);
     if(c->table_a == NULL) {
         free(c->keys_probabilities);
+        free(c->keys_diameters);
         return NULL;
     }
     c->table_r = matrix_new(size, size, 0.0);
     if(c->table_r == NULL) {
         free(c->keys_probabilities);
+        free(c->keys_diameters);
         matrix_free(c->table_a);
         return NULL;
     }
@@ -57,6 +65,7 @@ mwis_context* mwis_context_new(int keys)
         matrix_free(c->table_a);
         matrix_free(c->table_r);
         free(c->keys_probabilities);
+        free(c->keys_diameters);
         free(c);
         return NULL;
     }
@@ -82,6 +91,7 @@ mwis_context* mwis_context_new(int keys)
         matrix_free(c->table_a);
         matrix_free(c->table_r);
         free(c->keys_probabilities);
+        free(c->keys_diameters);
         free(c);
         return NULL;
     }
@@ -95,6 +105,7 @@ void mwis_context_free(mwis_context* c)
     matrix_free(c->table_r);
     fclose(c->report_buffer);
     free(c->keys_probabilities);
+    free(c->keys_diameters);
     free(c->names);
     free(c);
     return;

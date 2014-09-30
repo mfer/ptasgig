@@ -17,6 +17,7 @@
  */
 
 #include "mwis.h"
+#include "math.h"
 #include "latex.h"
 #include "dialogs.h"
 #include <gtk/gtk.h>
@@ -26,6 +27,7 @@ GtkWindow* window;
 
 GtkTreeView* nodes_view;
 GtkListStore* nodes_model;
+GtkSpinButton* k;
 
 GtkLabel* total_label;
 
@@ -76,6 +78,8 @@ int main(int argc, char **argv)
     nodes_view = GTK_TREE_VIEW(gtk_builder_get_object(builder, "nodes_view"));
     nodes_model = GTK_LIST_STORE(gtk_builder_get_object(builder, "nodes_model"));
     total_label = GTK_LABEL(gtk_builder_get_object(builder, "total_label"));
+    k = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "k"));
+
 
     load_dialog = GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "load_dialog"));
     save_dialog = GTK_FILE_CHOOSER(gtk_builder_get_object(builder, "save_dialog"));
@@ -328,10 +332,13 @@ void process(GtkButton* button, gpointer user_data)
                            "this problem. Sorry.");
         return;
     }
+    int logbase = gtk_spin_button_get_value_as_int(k);
+    //printf("k=%d\n", logbase);
 
     /* Fill context */
     char** names = c->names;
     float* probs = c->keys_probabilities;
+    float* diams = c->keys_diameters;
 
     GtkTreeIter iter;
     bool was_set = gtk_tree_model_get_iter_first(
@@ -344,6 +351,7 @@ void process(GtkButton* button, gpointer user_data)
 
     float total_weights = 0.0;
     int i = 0;
+    double dmin;
     do {
         gtk_tree_model_get_value(
                             GTK_TREE_MODEL(nodes_model), &iter, 0, &value);
@@ -355,15 +363,30 @@ void process(GtkButton* button, gpointer user_data)
         float v = g_value_get_float(&value);
         g_value_unset(&value);
 
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 5, &value);
+        float d = g_value_get_float(&value);
+        g_value_unset(&value);
+
         /* Set values */
         names[i] = n;
         probs[i] = v;
 
+        diams[i] = d;
+
         was_set = gtk_tree_model_iter_next(
                             GTK_TREE_MODEL(nodes_model), &iter);
         total_weights += v;
+
+
+        if(dmin>d || i==0) dmin=d;
         i++;
     } while(was_set);
+
+
+    printf("dmin=%f\n",dmin);
+    int level = (int) floor(log(1.0/dmin)/log((double)(logbase+1)));
+    printf("l=%d\n",level);
 
 
     /* Execute algorithm */
@@ -517,22 +540,38 @@ void save(FILE* file)
                             GTK_TREE_MODEL(nodes_model), &iter);
     }
 
-    /* Write node names */
+    /* Write node values */
     was_set = gtk_tree_model_get_iter_first(
                                     GTK_TREE_MODEL(nodes_model), &iter);
     while(was_set) {
         gtk_tree_model_get_value(
                             GTK_TREE_MODEL(nodes_model), &iter, 1, &value);
-        float v = g_value_get_float(&value);
+        float x = g_value_get_float(&value);
         g_value_unset(&value);
 
-        fprintf(file, "%.8f\n", v);
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 3, &value);
+        float y = g_value_get_float(&value);
+        g_value_unset(&value);
+
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 5, &value);
+        float d = g_value_get_float(&value);
+        g_value_unset(&value);
+
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 7, &value);
+        float w = g_value_get_float(&value);
+        g_value_unset(&value);                
+
+        fprintf(file, "%.8f %.8f %.8f %.8f\n", x,y,d,w);
 
         /* Next */
         was_set = gtk_tree_model_iter_next(
                             GTK_TREE_MODEL(nodes_model), &iter);
     }
 
+    fprintf(file, "%d\n", gtk_spin_button_get_value_as_int(k));
 }
 
 void load(FILE* file)
@@ -582,6 +621,10 @@ void load(FILE* file)
         /* Next */
         has_row = gtk_tree_model_iter_next(GTK_TREE_MODEL(nodes_model), &iter);
     }
+
+    int c = 0;
+    fscanf(file, "%i%*c", &c);
+    gtk_spin_button_set_value(k, (gdouble)c);
 
     /* Free resources */
     for(int i = 0; i < num_nodes; i++) {
