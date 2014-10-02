@@ -337,8 +337,12 @@ void process(GtkButton* button, gpointer user_data)
 
     /* Fill context */
     char** names = c->names;
-    float* probs = c->keys_probabilities;
-    float* diams = c->keys_diameters;
+    float* xs = c->keys_x;
+    float* ys = c->keys_y;
+    float* diams = c->keys_diameter;
+    float* weights = c->keys_weight;
+
+    
 
     GtkTreeIter iter;
     bool was_set = gtk_tree_model_get_iter_first(
@@ -360,7 +364,12 @@ void process(GtkButton* button, gpointer user_data)
 
         gtk_tree_model_get_value(
                             GTK_TREE_MODEL(nodes_model), &iter, 1, &value);
-        float v = g_value_get_float(&value);
+        float x = g_value_get_float(&value);
+        g_value_unset(&value);
+
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 3, &value);
+        float y = g_value_get_float(&value);
         g_value_unset(&value);
 
         gtk_tree_model_get_value(
@@ -368,15 +377,22 @@ void process(GtkButton* button, gpointer user_data)
         float d = g_value_get_float(&value);
         g_value_unset(&value);
 
+        gtk_tree_model_get_value(
+                            GTK_TREE_MODEL(nodes_model), &iter, 7, &value);
+        float w = g_value_get_float(&value);
+        g_value_unset(&value);
+
         /* Set values */
         names[i] = n;
-        probs[i] = v;
 
+        xs[i] = x;
+        ys[i] = y;
         diams[i] = d;
+        weights[i] = w;
 
         was_set = gtk_tree_model_iter_next(
                             GTK_TREE_MODEL(nodes_model), &iter);
-        total_weights += v;
+        total_weights += w;
 
 
         if(dmin>d || i==0) dmin=d;
@@ -397,11 +413,11 @@ void process(GtkButton* button, gpointer user_data)
     }
 
     /* Show tables */
-    printf("-----------------------------------\n");
-    matrix_print(c->table_a);
+    //printf("-----------------------------------\n");
+    //matrix_print(c->table_a);
 
-    printf("-----------------------------------\n");
-    matrix_print(c->table_r);
+    //printf("-----------------------------------\n");
+    //matrix_print(c->table_r);
 
     /* Generate report */
     bool report_created = mwis_report(c);

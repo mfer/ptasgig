@@ -41,11 +41,17 @@ typedef struct{
     int keys;
     char** names;
 
-    /* Probabilities */
-    float* keys_probabilities;
+    /* x */
+    float* keys_x;
+
+    /* y */
+    float* keys_y;
 
     /* Diameters */
-    float* keys_diameters;
+    float* keys_diameter;
+
+    /* Weights */
+    float* keys_weight;
 
 } mwis_context;
 

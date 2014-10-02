@@ -75,7 +75,7 @@ char* get_current_time()
 {
     GDateTime* now = g_date_time_new_now_local();
     /* 31/12/2012 03:00AM */
-    char* formatted = g_date_time_format(now, "%d/%m/%Y %I:%M%p");
+    char* formatted = g_date_time_format(now, "%a %b %d %T %Z %Y");
     g_date_time_unref(now);
     return formatted;
 }

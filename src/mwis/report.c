@@ -52,6 +52,8 @@ bool mwis_report(mwis_context* c)
     fprintf(report, "\\begin{compactitem}\n");
     fprintf(report, "\\item %s : \\textsc{%s}. \n",
                     "Executed on", get_current_time());
+    fprintf(report, "\\item %s : \\textsc{%d}. \n",
+                    "Number of disks", c->keys);
     fprintf(report, "\\item %s : \\textsc{%lf %s}. \n",
                     "Execution time", c->execution_time,
                     "seconds");
@@ -224,7 +226,7 @@ void mwis_nodes(mwis_context* c, FILE* stream)
         fprintf(stream, "\\multicolumn{1}{|c||}"
                         "{\\cellcolor{gray90}\\textbf{%i}} & ", i + 1);
         fprintf(stream, "%s & %.2f \\\\ \\hline\n",
-                        c->names[i], c->keys_probabilities[i]);
+                        c->names[i], c->keys_x[i]);
     }
     fprintf(stream, "\\end{tabular}\n");
 

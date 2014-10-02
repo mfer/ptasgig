@@ -31,15 +31,27 @@ mwis_context* mwis_context_new(int keys)
         return NULL;
     }
 
-    /* Try to allocate keys' probabilities */
-    c->keys_probabilities = (float*) malloc(keys * sizeof(float));
-    if(c->keys_probabilities == NULL) {
+    /* Try to allocate keys' x */
+    c->keys_x = (float*) malloc(keys * sizeof(float));
+    if(c->keys_x == NULL) {
         return NULL;
     }
 
-    /* Try to allocate keys' diameters */
-    c->keys_diameters = (float*) malloc(keys * sizeof(float));
-    if(c->keys_diameters == NULL) {
+    /* Try to allocate keys' y */
+    c->keys_y = (float*) malloc(keys * sizeof(float));
+    if(c->keys_y == NULL) {
+        return NULL;
+    }
+
+    /* Try to allocate keys' diameter */
+    c->keys_diameter = (float*) malloc(keys * sizeof(float));
+    if(c->keys_diameter == NULL) {
+        return NULL;
+    }
+
+    /* Try to allocate keys' weight */
+    c->keys_weight = (float*) malloc(keys * sizeof(float));
+    if(c->keys_weight == NULL) {
         return NULL;
     }
 
@@ -47,14 +59,18 @@ mwis_context* mwis_context_new(int keys)
     int size = keys + 1;
     c->table_a = matrix_new(size, size, PLUS_INF);
     if(c->table_a == NULL) {
-        free(c->keys_probabilities);
-        free(c->keys_diameters);
+        free(c->keys_x);
+        free(c->keys_y);
+        free(c->keys_diameter);
+        free(c->keys_weight);
         return NULL;
     }
     c->table_r = matrix_new(size, size, 0.0);
     if(c->table_r == NULL) {
-        free(c->keys_probabilities);
-        free(c->keys_diameters);
+        free(c->keys_x);
+        free(c->keys_y);
+        free(c->keys_diameter);        
+        free(c->keys_weight);
         matrix_free(c->table_a);
         return NULL;
     }
@@ -64,8 +80,10 @@ mwis_context* mwis_context_new(int keys)
     if(c->names == NULL) {
         matrix_free(c->table_a);
         matrix_free(c->table_r);
-        free(c->keys_probabilities);
-        free(c->keys_diameters);
+        free(c->keys_x);
+        free(c->keys_y);
+        free(c->keys_diameter);
+        free(c->keys_weight);
         free(c);
         return NULL;
     }
@@ -90,8 +108,10 @@ mwis_context* mwis_context_new(int keys)
     if(c->report_buffer == NULL) {
         matrix_free(c->table_a);
         matrix_free(c->table_r);
-        free(c->keys_probabilities);
-        free(c->keys_diameters);
+        free(c->keys_x);
+        free(c->keys_y);
+        free(c->keys_diameter);
+        free(c->keys_weight);
         free(c);
         return NULL;
     }
@@ -104,8 +124,10 @@ void mwis_context_free(mwis_context* c)
     matrix_free(c->table_a);
     matrix_free(c->table_r);
     fclose(c->report_buffer);
-    free(c->keys_probabilities);
-    free(c->keys_diameters);
+    free(c->keys_x);
+    free(c->keys_y);
+    free(c->keys_diameter);
+    free(c->keys_weight);
     free(c->names);
     free(c);
     return;
@@ -116,37 +138,35 @@ bool mwis(mwis_context *c)
     /* Start counting time */
     GTimer* timer = g_timer_new();
 
-    /* Setting probabilities values */
-    for(int i = 0; i < c->keys; i++) {
-        c->table_a->data[i][i + 1] = c->keys_probabilities[i];
-    }
-    /* Setting winning k for given probabilities in R */
-    for(int i = 0; i < c->keys; i++) {
-        c->table_r->data[i][i + 1] = i + 1;
-    }
-
-    /* Run the probabilities to win algorithm */
-
-    /* c->keys-1=Numbers of diagonals to fill */
-    for(int j = 1; j <= c->keys - 1; j++) {
-        for(int i = 1; i <= c->keys - j; i++) {
-            for(int k = i;  k <= i + j; k++) {
-                float p = 0.0;
-
-                /* Calculate the probability */
-                for(int l = i; l <= i + j; l++) {
-                    p += c->keys_probabilities[l - 1];
-                }
-                float t = c->table_a->data[i - 1][k - 1] +
-                          c->table_a->data[k][i + j] + p;
-
-                /* Compare to get the minimun value */
-                if(t < c->table_a->data[i - 1][i + j]) {
-                    c->table_a->data[i - 1][i + j] = t;
-                    c->table_r->data[i - 1][i + j] = k;
-                }
+//just a draft code to generate de subsets
+        int *S;
+        int i;
+        int k, N;    
+        N = c->keys;
+        S = (int *) calloc((N+1), (N+1) * sizeof(int));
+        S[0] = -1;
+        k = 0;
+        while (true) 
+        {    // very interesting form to generate all subsets
+            if (S[k] < (N-1)) {
+              S[k+1] = S[k] + 1;
+              k += 1;
+            } else {
+              S[k-1] += 1;
+              k -= 1;
             }
+            if (k == 0) break;
+    //        printf("%d: {", k);
+            for(i = 1; i <= k; i++){
+    //         printf ("%d, ", S[i]);
+            } 
+    //        printf("}\n");
         }
+
+
+//just begining with the disks x, y, diameter and weight
+    for (i=0;i<N;i++){
+        printf("%d %f %f %f %f\n",i, c->keys_x[i], c->keys_y[i], c->keys_diameter[i], c->keys_weight[i]);
     }
 
     /* Stop counting time */

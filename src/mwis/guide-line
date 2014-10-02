@@ -20,12 +20,12 @@ UNDEFINE
 table_IS_UNDEFINED
 table_ON_square_AND_set_OF_square_AND_set
 
----algorythm 2.4
+_______________________________________________________________________
+
+---algorythm 2.4-first-try
 for ALL_J
 	AT_ON_S_AND_I_OF_Sprime_gh_AND_J = UNDEFINE
-
 Q = D_rs_OF_j_INTERSECTING_Sprime_gh
-
 for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
 	if I_UNION_U_ARE_DISJOINT then
 		Iprime = I_INTERSECTS_Sprime_gh
@@ -38,3 +38,44 @@ for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
 		fi
 	fi
 od
+
+_______________________________________________________________________
+
+---signatures
+square new_square(int,int,int,int)
+set disjoint(set)
+set intersects(set,square)
+set level(set,int)
+sub_square new_sub_square(int,int,square)
+void init_aux_table(square,set,sub_square)
+set disjoint(set,set)
+int size(set)
+set intersects(set,sub_square)
+set union(set,set)
+set get_table(set)
+set contained(set,sub_square)
+set boundary(set,sub_square)
+set get_aux_table(square,set,sub_square,set,set)
+int weight(set)
+void update_aux_table(square,set,sub_square,set,set)
+
+---algorythm 2.4-almost-there!
+S = new_square(l,d,r,u)
+I = disjoint(intersects(level(D,j),S))
+for 0<=g,h<=k do
+	Sprime = new_sub_square(g,h,S)
+	init_aux_table(S,I,Sprime)
+	Q = intersects(D,Sprime)
+	for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
+		if size(disjoint(I,U)) > 0 then
+			Iprime = intersects(I,Sprime)
+			X = get_table(union(Iprime,U))
+			X = union(X,contained(U,Sprime))
+			J = boundary(U,Sprime)
+			if size(get_aux_table(S,I,Sprime,J)) == 0 || weight(X) > weight(AT) then
+				update_aux_table(S,I,Sprime,J,X)
+			fi
+		fi
+	od
+od
+
