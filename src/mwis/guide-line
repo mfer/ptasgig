@@ -42,40 +42,58 @@ od
 _______________________________________________________________________
 
 ---signatures
-square new_square(int,int,int,int)
-set disjoint(set)
-set intersects(set,square)
-set level(set,int)
-sub_square new_sub_square(int,int,square)
-void init_aux_table(square,set,sub_square)
-set disjoint(set,set)
 int size(set)
-set intersects(set,sub_square)
-set union(set,set)
-set get_table(set)
-set contained(set,sub_square)
-set boundary(set,sub_square)
-set get_aux_table(square,set,sub_square,set,set)
 int weight(set)
-void update_aux_table(square,set,sub_square,set,set)
+set boundary(set,sub_square)
+set contained(set,sub_square)
+set disjoint(set)
+set disjoint(set,set)
+set get_aux_set(square,set,sub_square,set,set)
+set get_set(set)
+set intersects(set,square)
+set intersects(set,sub_square)
+set level(gig,int)
+set union(set,set)
+square new_square(int,int,int,int)
+sub_square new_sub_square(int,int,square)
+void init_aux_set(square,set,sub_square)
+void update_aux_set(square,set,sub_square,set,set)
 
----algorythm 2.4-almost-there!
-S = new_square(l,d,r,u)
-I = disjoint(intersects(level(D,j),S))
-for 0<=g,h<=k do
-	Sprime = new_sub_square(g,h,S)
-	init_aux_table(S,I,Sprime)
-	Q = intersects(D,Sprime)
-	for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
-		if size(disjoint(I,U)) > 0 then
-			Iprime = intersects(I,Sprime)
-			X = get_table(union(Iprime,U))
-			X = union(X,contained(U,Sprime))
-			J = boundary(U,Sprime)
-			if size(get_aux_table(S,I,Sprime,J)) == 0 || weight(X) > weight(AT) then
-				update_aux_table(S,I,Sprime,J,X)
-			fi
-		fi
+
+float min_diameter(gig)
+set gig2set(gig,int,int,int)
+
+---algorythm 2.4-almost-there-again!
+INPUT:
+	int k
+	gig G
+		//D(r,s) // activelines r,s 
+		//Disks with diameters already scaled so that the largest disk has diameter 1
+
+L = floor(log_{k+1}(1./min_diameter(Drs)))
+
+for 0_<=_j_<=_L do
+    for 0_<=_r,s_<_k do
+
+		left,down,right,up = getsquare(D,j,r,s)
+		S = new_square(left,down,right,up)
+
+		I = disjoint(intersects(level(D,j),S))
+		for 0<=g,h<=k do
+			Sprime = new_sub_square(g,h,S)
+			init_aux_set(S,I,Sprime)
+			Q = intersects(D,Sprime)
+			for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
+				if size(disjoint(I,U)) > 0 then
+					Iprime = intersects(I,Sprime)
+					X = get_set(union(Iprime,U))
+					X = union(X,contained(U,Sprime))
+					J = boundary(U,Sprime)
+					if size(get_aux_set(S,I,Sprime,J)) == 0 || weight(X) > weight(AT) then
+						update_aux_set(S,I,Sprime,J,X)
+					fi
+				fi
+			od
+		od
 	od
 od
-
