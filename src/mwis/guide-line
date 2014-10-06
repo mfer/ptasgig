@@ -1,46 +1,3 @@
----data structures
-square
-level
-set
-disk
-integer
-table
-table_entry
-
----algorythms
-gig_OF_level_INTERSECTING_square
-set_ARE_DISJOINT
-set_INTERSECTS_square
-table_ON_square_OF_set
-set_IS_CONTAINED_IN_square
-set_INTERSECTS_BOUNDARY_OF_square
-
-set_UNION_set
-UNDEFINE
-table_IS_UNDEFINED
-table_ON_square_AND_set_OF_square_AND_set
-
-_______________________________________________________________________
-
----algorythm 2.4-first-try
-for ALL_J
-	AT_ON_S_AND_I_OF_Sprime_gh_AND_J = UNDEFINE
-Q = D_rs_OF_j_INTERSECTING_Sprime_gh
-for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
-	if I_UNION_U_ARE_DISJOINT then
-		Iprime = I_INTERSECTS_Sprime_gh
-		X = T_ON_Sprime_gh_OF_Iprime_UNION_U
-		X = X_UNION_U_IS_CONTAINED_IN_Sprime_gh
-		J = U_INTERSECTS_BOUNDARY_OF_Sprime_gh
-		if AT_ON_S_AND_I_OF_Sprime_gh_AND_J_IS_UNDEFINED or
-			w(X)_>_w(AT_S_AND_I_Sprime_gh_AND_J) then
-				AT_ON_S_AND_I_OF_Sprime_gh_AND_J = X
-		fi
-	fi
-od
-
-_______________________________________________________________________
-
 ---signatures
 int size(set)
 int weight(set)
@@ -52,47 +9,76 @@ set get_aux_set(square,set,sub_square,set,set)
 set get_set(set)
 set intersects(set,square)
 set intersects(set,sub_square)
-set level(gig,int)
+set level(set,string,int)
 set union(set,set)
-square new_square(int,int,int,int)
-sub_square new_sub_square(int,int,square)
+square new_square(int,int,int,int) 						//(left,down,right,up)
+sub_square new_sub_square(int,int,int,int)				//(leftprime,downprime,rightprime,upprime)
 void init_aux_set(square,set,sub_square)
 void update_aux_set(square,set,sub_square,set,set)
+void init_sub_set(set,sub_set)
+void init_sub_set_with_size(set,sub_set,int)
+bool next_sub_set(sub_set)
+sub_set get_sub_set(sub_set)
+float min_diameter(set)
 
-
-float min_diameter(gig)
-set gig2set(gig,int,int,int)
-
----algorythm 2.4-almost-there-again!
+---algorythm 2.4
 INPUT:
-	int k
-	gig G
-		//D(r,s) // activelines r,s 
-		//Disks with diameters already scaled so that the largest disk has diameter 1
+	int k								//
+	int C 								//
+	set D = {x,y,d,w}					//
 
-L = floor(log_{k+1}(1./min_diameter(Drs)))
 
-for 0_<=_j_<=_L do
-    for 0_<=_r,s_<_k do
+OUTPUT:
+	aux_set AT
 
-		left,down,right,up = getsquare(D,j,r,s)
-		S = new_square(left,down,right,up)
+dmin = min_diameter(set) 							//WHILE_READING_G_SELECTS_THE_MINIMUM_diameter
+l = floor(log_{k+1}(1./min_diameter(Drs)))
 
-		I = disjoint(intersects(level(D,j),S))
-		for 0<=g,h<=k do
-			Sprime = new_sub_square(g,h,S)
-			init_aux_set(S,I,Sprime)
-			Q = intersects(D,Sprime)
-			for ALL_U_SUBSET_OF_Q_WITH_SIZEOF_U_<=_C_*+k^2 do
-				if size(disjoint(I,U)) > 0 then
-					Iprime = intersects(I,Sprime)
-					X = get_set(union(Iprime,U))
-					X = union(X,contained(U,Sprime))
-					J = boundary(U,Sprime)
-					if size(get_aux_set(S,I,Sprime,J)) == 0 || weight(X) > weight(AT) then
-						update_aux_set(S,I,Sprime,J,X)
-					fi
-				fi
+
+for (j=l; l>=0; l--) do 								//LEVELS
+    for (r=0; r<k; r++) do 								//ACTIVE LINE r
+	    for (s=0; s<k; s++) do							//ACTIVE LINE s
+
+	    	part = (k+1)^j
+
+		    for (p=0; p<part; p++) do 						//SQUARES columns
+			    for (q=0; q<part; q++) do					//SQUARES row
+
+			    	delta  = 1/part
+					S = new_square(p*delta,q*delta,(p+1)*delta,(q+1)*delta)
+
+					init_sub_set(level(intersects(D,S),'least',j), I)
+					while (next_sub_set(I)) do
+						if disjoint(get_sub_set(I)) then
+
+							for (g=0; g<=k; g++) do 					//SUBSQUARES columns
+								for (h=0; h<=k; h++) do 				//SUBSQUARES rows
+
+									deltaprime = delta/(1+k)
+									Sprime = new_sub_square(    p*delta + g*deltaprime,
+															    q*delta + h*deltaprime,
+															(p+1)*delta + (g+1)*deltaprime,
+															(q+1)*delta + (h+1)*deltaprime   )
+									init_aux_set(S,I,Sprime)
+									Q = intersects(D,Sprime)
+
+									init_sub_set_with_size(Q, U,C*k^2)
+									while (next_sub_set(Q)) do
+										if size(disjoint(I,U)) > 0 then
+											Iprime = intersects(I,Sprime)
+											X = union(get_set(union(Iprime,U)),contained(U,Sprime))
+											J = boundary(U,Sprime)
+											AT = get_aux_set(S,I,Sprime,J)
+											if size(AT) == 0 || weight(X) > weight(AT) then
+												update_aux_set(S,I,Sprime,J,X)
+											fi
+										fi
+									od
+								od
+							od
+						fi
+					od
+				od
 			od
 		od
 	od
