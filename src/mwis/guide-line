@@ -31,20 +31,20 @@ INPUT:
 OUTPUT:
 	aux_set AT
 
-dmin = min_diameter(set) 							//WHILE_READING_G_SELECTS_THE_MINIMUM_diameter
+dmin = min_diameter(set)
 l = floor(log_{k+1}(1./min_diameter(Drs)))
 
 
-for (j=l; l>=0; l--) do 								//LEVELS
+for (j=l; j>=0; j--) do 								//LEVELS
     for (r=0; r<k; r++) do 								//ACTIVE LINE r
 	    for (s=0; s<k; s++) do							//ACTIVE LINE s
 
-	    	part = (k+1)^j
+	    	partition = (k+1)^j
 
-		    for (p=0; p<part; p++) do 						//SQUARES columns
-			    for (q=0; q<part; q++) do					//SQUARES row
+		    for (p=0; p<partition; p++) do 						//SQUARES columns
+			    for (q=0; q<partition; q++) do					//SQUARES row
 
-			    	delta  = 1/part
+			    	delta  = 1/partition
 					S = new_square(p*delta,q*delta,(p+1)*delta,(q+1)*delta)
 
 					init_sub_set(level(intersects(D,S),'least',j), I)

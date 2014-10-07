@@ -332,10 +332,9 @@ void process(GtkButton* button, gpointer user_data)
                            "this problem. Sorry.");
         return;
     }
-    int logbase = gtk_spin_button_get_value_as_int(k);
-    //printf("k=%d\n", logbase);
-
+    
     /* Fill context */
+    c->k = gtk_spin_button_get_value_as_int(k);
     char** names = c->names;
     float* xs = c->keys_x;
     float* ys = c->keys_y;
@@ -355,7 +354,7 @@ void process(GtkButton* button, gpointer user_data)
 
     float total_weights = 0.0;
     int i = 0;
-    double dmin;
+
     do {
         gtk_tree_model_get_value(
                             GTK_TREE_MODEL(nodes_model), &iter, 0, &value);
@@ -394,15 +393,8 @@ void process(GtkButton* button, gpointer user_data)
                             GTK_TREE_MODEL(nodes_model), &iter);
         total_weights += w;
 
-
-        if(dmin>d || i==0) dmin=d;
         i++;
     } while(was_set);
-
-
-    printf("dmin=%f\n",dmin);
-    int level = (int) floor(log(1.0/dmin)/log((double)(logbase+1)));
-    printf("l=%d\n",level);
 
 
     /* Execute algorithm */

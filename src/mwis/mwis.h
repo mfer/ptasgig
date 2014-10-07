@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2012 Carolina Aguilar <caroagse@gmail.com>
- * Copyright (C) 2012 Carlos Jenkins <carlos@jenkins.co.cr>
+ * Copyright (C) 2014 Manassés Ferreira Neto <mfer@dcc.ufmg.br>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +22,7 @@
 #include "matrix.h"
 
 /**
- * Optimal Binary Search Tree algorithm context data structure.
+ * MWIS algorithm context data structure.
  */
 typedef struct{
 
@@ -38,7 +37,7 @@ typedef struct{
     matrix* table_r;
 
     /*Number of Keys*/
-    int keys;
+    int keys, k;
     char** names;
 
     /* x */
@@ -58,10 +57,38 @@ typedef struct{
 mwis_context* mwis_context_new(int keys);
 void mwis_context_free(mwis_context* c);
 
+
 /**
- * Perform Optimal Binary Search Tree algorithm with given context.
+ * MWIS set data structure.
+ */
+typedef struct{
+
+    /*Number of Disks*/
+    int N;
+
+    /* x */
+    float* x;
+
+    /* y */
+    float* y;
+
+    /* Diameters */
+    float* diameter;
+    float dmin, dmax;
+
+    /* Weights */
+    float* weight;
+
+} mwis_set;
+
+mwis_set* mwis_set_new(mwis_context* c);
+void mwis_set_free(mwis_set* set);
+
+/**
+ * Perform Maximum Weighted Independent Set on Geometric Intersection Graphs
+ *      with Polynomial Time Approximation Scheme
  *
- * @param mwis_context, the Optimal Binary Search Tree's context data structure.
+ * @param mwis_context, the MWIS's context data structure.
  * @return TRUE if execution was successful or FALSE if and error ocurred. Check
  *         'status' flag in context to know what went wrong.
  */

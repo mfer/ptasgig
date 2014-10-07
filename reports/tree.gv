@@ -4,47 +4,6 @@ digraph bstree {
     graph [ordering="out"];
 
     1 [label = "A0"];
-    2 [label = "A1"];
-    3 [label = "B0"];
-    4 [label = "B1"];
-    5 [label = "C0"];
-    6 [label = "C1"];
-    7 [label = "D0"];
-    8 [label = "D1"];
-    9 [label = "E0"];
-    10 [label = "E1"];
-    11 [label = "F0"];
-    12 [label = "F1"];
-    13 [label = "G0"];
-    14 [label = "G1"];
-    15 [label = "H0"];
-    16 [label = "H1"];
-    17 [label = "I0"];
-    18 [label = "I1"];
-    19 [label = "J0"];
-    20 [label = "J1"];
-    21 [label = "K0"];
-    22 [label = "K1"];
-    23 [label = "L0"];
-    24 [label = "L1"];
-    25 [label = "M0"];
-    26 [label = "M1"];
-    27 [label = "M1"];
-    28 [label = "N0"];
-    29 [label = "N1"];
-    30 [label = "N1"];
-    31 [label = "O0"];
-    32 [label = "O1"];
-    33 [label = "P1"];
-    34 [label = "R0"];
-    35 [label = "S0"];
-    36 [label = "T0"];
-    37 [label = "U0"];
-    38 [label = "V0"];
-    39 [label = "W0"];
-    40 [label = "X0"];
-    41 [label = "Y0"];
-    42 [label = "Z0"];
 
 
 }
