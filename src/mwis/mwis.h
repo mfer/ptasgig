@@ -57,9 +57,8 @@ typedef struct{
 mwis_context* mwis_context_new(int keys);
 void mwis_context_free(mwis_context* c);
 
-
 /**
- * MWIS set data structure.
+ * MWIS set.
  */
 typedef struct{
 
@@ -74,7 +73,7 @@ typedef struct{
 
     /* Diameters */
     float* diameter;
-    float dmin, dmax;
+    float dmin, dmax, L;
 
     /* Weights */
     float* weight;
@@ -83,6 +82,27 @@ typedef struct{
 
 mwis_set* mwis_set_new(mwis_context* c);
 void mwis_set_free(mwis_set* set);
+
+/**
+ * MWIS square.
+ */
+typedef struct{
+
+    /* left,right,up,down */
+    float left,right,up,down;
+
+} mwis_square;
+
+mwis_square* mwis_square_new(float left, float right, float up, float down);
+void mwis_square_free(mwis_square* square);
+
+
+/**
+ * MWIS.
+ */
+mwis_set* mwis_intersects(mwis_set* set, mwis_square* square);
+
+
 
 /**
  * Perform Maximum Weighted Independent Set on Geometric Intersection Graphs

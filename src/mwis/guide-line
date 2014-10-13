@@ -11,8 +11,8 @@ set intersects(set,square)
 set intersects(set,sub_square)
 set level(set,string,int)
 set union(set,set)
-square new_square(int,int,int,int) 						//(left,down,right,up)
-sub_square new_sub_square(int,int,int,int)				//(leftprime,downprime,rightprime,upprime)
+square new_square(int,int,int,int)       //(left,down,right,up)
+sub_square new_sub_square(int,int,int,int)    //(leftprime,downprime,rightprime,upprime)
 void init_aux_set(square,set,sub_square)
 void update_aux_set(square,set,sub_square,set,set)
 void init_sub_set(set,sub_set)
@@ -23,63 +23,63 @@ float min_diameter(set)
 
 ---algorythm 2.4
 INPUT:
-	int k								//
-	int C 								//
-	set D = {x,y,d,w}					//
+ int k        //
+ int C         //
+ set D = {x,y,d,w}     //
 
 
 OUTPUT:
-	aux_set AT
+ aux_set AT
 
 dmin = min_diameter(set)
 l = floor(log_{k+1}(1./min_diameter(Drs)))
 
 
-for (j=l; j>=0; j--) do 								//LEVELS
-    for (r=0; r<k; r++) do 								//ACTIVE LINE r
-	    for (s=0; s<k; s++) do							//ACTIVE LINE s
+for (j=l; j>=0; j--) do         //LEVELS
+    for (r=0; r<k; r++) do         //ACTIVE LINE r
+     for (s=0; s<k; s++) do       //ACTIVE LINE s
 
-	    	partition = (k+1)^j
+      partition = (k+1)^j
 
-		    for (p=0; p<partition; p++) do 						//SQUARES columns
-			    for (q=0; q<partition; q++) do					//SQUARES row
+      for (p=0; p<partition; p++) do       //SQUARES columns
+       for (q=0; q<partition; q++) do     //SQUARES row
 
-			    	delta  = 1/partition
-					S = new_square(p*delta,q*delta,(p+1)*delta,(q+1)*delta)
+        delta  = 1/partition
+     S = new_square(p*delta,q*delta,(p+1)*delta,(q+1)*delta)
 
-					init_sub_set(level(intersects(D,S),'least',j), I)
-					while (next_sub_set(I)) do
-						if disjoint(get_sub_set(I)) then
+     init_sub_set(level(intersects(D,S),'least',j), I)
+     while (next_sub_set(I)) do
+      if disjoint(get_sub_set(I)) then
 
-							for (g=0; g<=k; g++) do 					//SUBSQUARES columns
-								for (h=0; h<=k; h++) do 				//SUBSQUARES rows
+       for (g=0; g<=k; g++) do      //SUBSQUARES columns
+        for (h=0; h<=k; h++) do     //SUBSQUARES rows
 
-									deltaprime = delta/(1+k)
-									Sprime = new_sub_square(    p*delta + g*deltaprime,
-															    q*delta + h*deltaprime,
-															(p+1)*delta + (g+1)*deltaprime,
-															(q+1)*delta + (h+1)*deltaprime   )
-									init_aux_set(S,I,Sprime)
-									Q = intersects(D,Sprime)
+         deltaprime = delta/(1+k)
+         Sprime = new_sub_square(    p*delta + g*deltaprime,
+                   q*delta + h*deltaprime,
+               (p+1)*delta + (g+1)*deltaprime,
+               (q+1)*delta + (h+1)*deltaprime   )
+         init_aux_set(S,I,Sprime)
+         Q = intersects(D,Sprime)
 
-									init_sub_set_with_size(Q, U,C*k^2)
-									while (next_sub_set(Q)) do
-										if size(disjoint(I,U)) > 0 then
-											Iprime = intersects(I,Sprime)
-											X = union(get_set(union(Iprime,U)),contained(U,Sprime))
-											J = boundary(U,Sprime)
-											AT = get_aux_set(S,I,Sprime,J)
-											if size(AT) == 0 || weight(X) > weight(AT) then
-												update_aux_set(S,I,Sprime,J,X)
-											fi
-										fi
-									od
-								od
-							od
-						fi
-					od
-				od
-			od
-		od
-	od
+         init_sub_set_with_size(Q, U,C*k^2)
+         while (next_sub_set(Q)) do
+          if size(disjoint(I,U)) > 0 then
+           Iprime = intersects(I,Sprime)
+           X = union(get_set(union(Iprime,U)),contained(U,Sprime))
+           J = boundary(U,Sprime)
+           AT = get_aux_set(S,I,Sprime,J)
+           if size(AT) == 0 || weight(X) > weight(AT) then
+            update_aux_set(S,I,Sprime,J,X)
+           fi
+          fi
+         od
+        od
+       od
+      fi
+     od
+    od
+   od
+  od
+ od
 od

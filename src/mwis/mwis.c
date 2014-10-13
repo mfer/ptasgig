@@ -20,22 +20,120 @@
 #include "dialogs.h"
 GtkWindow* window;
 
-void normalize_diameter(mwis_set* D){
-    int i;
-    for (i=1; i < D->N; i++) {
-        D->diameter[i] = D->diameter[i] / D->dmax;
+mwis_set* mwis_set_new_intersects(mwis_set* set, int ids[], int j)
+{
+    int N = j;
+
+    /* Allocate structures */
+    mwis_set* D = (mwis_set*) malloc(sizeof(mwis_set));
+    if(D == NULL) {
+        return NULL;
     }
+
+    /* Try to allocate x */
+    D->x = (float*) malloc(N * sizeof(float));
+    if(D->x == NULL) {
+        return NULL;
+    }
+
+    /* Try to allocate y */
+    D->y = (float*) malloc(N * sizeof(float));
+    if(D->y == NULL) {
+        return NULL;
+    }
+
+    /* Try to allocate diameter */
+    D->diameter = (float*) malloc(N * sizeof(float));
+    if(D->diameter == NULL) {
+        return NULL;
+    }
+
+    /* Try to allocate weight */
+    D->weight = (float*) malloc(N * sizeof(float));
+    if(D->weight == NULL) {
+        return NULL;
+    }
+
+    /* Fill set */
+    D->N = j;
+    D->x = set->x;
+    D->y = set->y;
+    D->diameter = set->diameter;
+    D->weight = set->weight;
+
+//    int i;
+//    for(i=0;i<D->N;i++){
+//        printf("intersects: %d %f %f %f %f\n", i, D->x[i], D->y[i], D->diameter[i], D->weight[i]);
+//    }
+
+    return D;
+}
+
+mwis_set* mwis_intersects(mwis_set* set, mwis_square* square)
+{
+    int N=set->N;
+    int i,j=0,ids[N];
+
+    for(i=0;i<N;i++){
+        if( set->x[i] >  square->left && 
+            set->x[i] <= square->right &&
+            set->y[i] >  square->down && 
+            set->y[i] <= square->up ){
+            //printf("disk: %d %f %f %f %f\n", i, set->x[i], set->y[i], set->diameter[i], set->weight[i]);
+            //printf("inside\n");
+            //printf("square: (%f,%f) %f %f %f %f\n", (square->left + square->right)/2.0, (square->down +  square->up)/2.0, square->left, square->down, square->right, square->up);
+
+            printf("%d_(%f,%f)\n", i, (square->left + square->right)/2.0, (square->down +  square->up)/2.0);
+            ids[j]=i;
+            j++;
+        }
+    }
+    return mwis_set_new_intersects(set, ids, j);
+}
+
+mwis_square* mwis_square_new(float left, float down, float right, float up){
+    mwis_square* S = (mwis_square*) malloc(sizeof(mwis_square));
+    if(S == NULL) {
+        return NULL;
+    }
+    S->left = left;
+    S->down = down;
+    S->right = right;
+    S->up = up;    
+    return S;
+}
+
+void mwis_square_free(mwis_square* S)
+{
+    free(S);
+    return;
 }
 
 void min_max_diameter(mwis_set* D){
     int i=0;
-    float dmin=D->diameter[i], dmax=D->diameter[i];
+    float dmin=D->diameter[i], dmax=D->diameter[i], L=D->x[i];
+    if(D->y[i]>L) L=D->y[i];
     for (i=1; i < D->N; i++) {
         if(dmin > D->diameter[i]) dmin=D->diameter[i];
         if(dmax < D->diameter[i]) dmax=D->diameter[i];
+
+        if(D->x[i]>L) L=D->x[i];
+        if(D->y[i]>L) L=D->y[i];
     }
     D->dmin=dmin;
     D->dmax=dmax;
+    D->L = L;
+}
+
+void normalize_diameter(mwis_set* D){
+    min_max_diameter(D);
+    int i;
+    for (i=0; i < D->N; i++) {
+        D->x[i] = D->x[i] / D->dmax;
+        D->y[i] = D->y[i] / D->dmax;
+        D->diameter[i] = D->diameter[i] / D->dmax;
+    }
+    D->dmin = D->dmin / D->dmax;
 }
 
 //receive a context and made it a set
@@ -80,8 +178,6 @@ mwis_set* mwis_set_new(mwis_context* c)
         return NULL;
     }
 
-//TODO: make the normalization of diameters! The biggest has to be made unitary in this new scale.    
-
     /* Fill set */
     D->N = c->keys;
     D->x = c->keys_x;
@@ -89,13 +185,10 @@ mwis_set* mwis_set_new(mwis_context* c)
     D->diameter = c->keys_diameter;
     D->weight = c->keys_weight;
 
-    int i;
-    for(i=0;i<D->N;i++){
-        printf("%d %f %f %f %f\n", i, D->x[i], D->y[i], D->diameter[i], D->weight[i]);
-    }
-
-    min_max_diameter(D);
-    normalize_diameter(D);
+    //int i;
+    //for(i=0;i<D->N;i++){
+    //    printf("%d %f %f %f %f\n", i, D->x[i], D->y[i], D->diameter[i], D->weight[i]);
+    //}
 
     return D;
 }
@@ -258,7 +351,7 @@ bool mwis(mwis_context* c)
     GTimer* timer = g_timer_new();
 
         //alpha code =^)
-        generate_subsets(c);
+        //generate_subsets(c);
 
     //pre-processing
         int k = c->k;
@@ -273,39 +366,67 @@ bool mwis(mwis_context* c)
             show_error(window, "Unable to allocate enough memory");
             return false;
         }
-
+        /* normalize the set x,y, diameters and dmin using the greatest diameter*/
+        normalize_diameter(D);
         
+        /*this dmin is already normalized */
         int l = (int)(log(1/D->dmin)/log(k+1));
         printf("(k -- dmin -- dmax -- l)=(%d -- %f -- %f -- %d)\n", k,D->dmin,D->dmax,l);
 
-        int i;
-        for(i=0;i<D->N;i++){
-            printf("%d %f %f %f %f\n", i, D->x[i], D->y[i], D->diameter[i], D->weight[i]);
-        }
+        //int i;
+        //for(i=0;i<D->N;i++){
+            //printf("%d %f %f %f %f\n", i, D->x[i], D->y[i], D->diameter[i], D->weight[i]);
+        //}
 
 
     //implementing 2.4 algorythm
         int j,r,s,partition,p,q,g,h;
         float delta,deltaprime;
-        printf("j r s partition p q delta g h deltprime\n");
+
         for (j=l;j>=0;j--){
+
+            partition=pow((k+1),j);
+            printf("j=%d_L/dmax=%f\n",j,D->L/D->dmax);
+            delta=(D->L/D->dmax)/(float)partition;
+
             for (r=0;r<k;r++){
                 for (s=0;s<k;s++){
-                    
-                    partition=pow((k+1),j);
 
                     for (p=0;p<partition;p++){
                         for (q=0;q<partition;q++){
 
-                            delta=1.0/(float)partition;
-//                            S = new_square(p*delta,q*delta,(p+1)*delta,(q+1)*delta)
+                            //printf("S: %f %f %f %f\n",p*delta,q*delta,(p+1)*delta,(q+1)*delta);
+                            mwis_square* S = NULL;
+                            if(S != NULL) {
+                                mwis_square_free(S);
+                            }
+                            S = mwis_square_new(p*delta,q*delta,(p+1)*delta,(q+1)*delta);
+                            if(S == NULL) {
+                                show_error(window, "Unable to allocate enough memory");
+                                return false;
+                            }
 
-//                            init_sub_set(level(intersects(D,S),"least",j),I)
+
+                            
+                            mwis_set* A = NULL;
+                            if(A != NULL) {
+                                mwis_set_free(D);
+                            }
+                            A = mwis_intersects(D,S);
+                            if(A == NULL) {
+                                show_error(window, "Unable to allocate enough memory");
+                                return false;
+                            }
+
+                            
+                            //mwis_sub_set_new(level(intersects(D,S),"least",j),I);
 //                            while (next_sub_set(I)){
 //                                if (disjoint(get_sub_set(I))){
 
                                     for (g=0;g<=k;g++){
                                         for (h=0;h<=k;h++){
+
+                                            //printf("j=%d_r=%d_s=%d_partition=%d_p=%d_q=%d_delta=%f\n",j,r,s,partition,p,q,delta);
 
                                             deltaprime = delta/(float)(1+k);
 //                                            Sprime new_sub_square(    p*delta + g*deltaprime,(p+1)*delta + (g+1)*deltaprime,(q+1)*delta + (h+1)*deltaprime )
@@ -323,7 +444,7 @@ bool mwis(mwis_context* c)
 //                                                    AT = get_aux_set(S,I,Sprime,J)
 //                                                    if size(AT) == 0 || weight(X) > weight(AT) {
 //                                                        update_aux_set(S,I,Sprime,J,X)
-                                                        printf("%d %d %d %d %d %d %f %d %d %f\n",j,r,s,partition,p,q,delta,g,h,deltaprime);
+                                                        //printf("%d %d %d %d %d %d %f %d %d %f\n",j,r,s,partition,p,q,delta,g,h,deltaprime);
 //                                                    }
 //                                                }
 //                                            }
