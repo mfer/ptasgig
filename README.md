@@ -1,5 +1,5 @@
 This project is being interrupted for unkwon period...
-You can follow this other with common objectivesÇ
+You can follow this other with common objectives:
 https://github.com/mfer/mrs.git
 
 PTASGIG
