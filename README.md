@@ -1,3 +1,7 @@
+This project is being interrupted for unkwon period...
+You can follow this other with common objectivesÇ
+https://github.com/mfer/mrs.git
+
 PTASGIG
 =======
 Implementation of the MWIS PTAS described at
